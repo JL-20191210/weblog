@@ -1,0 +1,15 @@
+[TraceId: ] 2024-05-27 22:52:23.779 [main] INFO  com.shuige.weblog.web.WebblogWebApplication - Starting WebblogWebApplication using Java 1.8.0_362 on Mac.local with PID 93537 (/Users/felix/IdeaProjects/weblog/weblog-springboot/weblog-web/target/classes started by felix in /Users/felix/IdeaProjects/weblog/weblog-springboot)
+[TraceId: ] 2024-05-27 22:52:23.782 [main] INFO  com.shuige.weblog.web.WebblogWebApplication - The following profiles are active: prod
+[TraceId: ] 2024-05-27 22:52:24.960 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[TraceId: ] 2024-05-27 22:52:24.966 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+[TraceId: ] 2024-05-27 22:52:24.966 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.56]
+[TraceId: ] 2024-05-27 22:52:25.014 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[TraceId: ] 2024-05-27 22:52:25.015 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1080 ms
+[TraceId: ] 2024-05-27 22:52:25.514 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[TraceId: ] 2024-05-27 22:52:25.528 [main] INFO  com.shuige.weblog.web.WebblogWebApplication - Started WebblogWebApplication in 2.42 seconds (JVM running for 2.971)
+[TraceId: ] 2024-05-27 22:54:15.322 [http-nio-8080-exec-2] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[TraceId: ] 2024-05-27 22:54:15.323 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[TraceId: ] 2024-05-27 22:54:15.328 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 5 ms
+[TraceId: 3e515efa-1754-470f-a900-6a84e2b99c86] 2024-05-27 22:54:15.617 [http-nio-8080-exec-2] INFO  c.s.weblog.common.aspect.ApiOperationLogAspect - ==== 请求开始: [测试接口], 入参: {"username":"","sex":1,"age":32,"email":"123124@qq.com"}, org.springframework.validation.BeanPropertyBindingResult: 1 errors
+Field error in object 'user' on field 'username': rejected value []; codes [NotBlank.user.username,NotBlank.username,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [user.username,username]; arguments []; default message [username]]; default message [用户名不能为空], 请求类: TestController, 请求方法: test3 === 
+[TraceId: 3e515efa-1754-470f-a900-6a84e2b99c86] 2024-05-27 22:54:15.641 [http-nio-8080-exec-2] INFO  c.s.weblog.common.aspect.ApiOperationLogAspect - === 请求结束: [测试接口], 耗时: 51ms, 出参: {"success":false,"message":"用户名不能为空","errorCode":null,"data":null} === 

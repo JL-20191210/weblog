@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 /**
  * @author felix
  * @date 2024/5/26 23:54
+ * 日志切面类
  */
 @Aspect
 @Component
@@ -38,7 +39,7 @@ public class ApiOperationLogAspect {
             //请求开始时间
             long startTime = System.currentTimeMillis();
 
-            //MDC
+            //MDC traceId表示跟踪ID，值这里直接用uuid
             MDC.put("traceId", UUID.randomUUID().toString());
 
             //获取被请求的类和方法
@@ -54,7 +55,7 @@ public class ApiOperationLogAspect {
             String description = getApiOperationLogDescription(joinPoint);
 
             //打印请求相关参数
-            log.info("====== 请求开始: [{}], 入参: {}, 请求类: {}, 请求方法: {} =================================== ",
+            log.info("==== 请求开始: [{}], 入参: {}, 请求类: {}, 请求方法: {} === ",
                     description, argsJsonStr, className, methodName);
 
             //执行切点方法
@@ -64,11 +65,12 @@ public class ApiOperationLogAspect {
             long executionTime = System.currentTimeMillis()- startTime;
 
             //打印出参等相关信息
-            log.info("====== 请求结束: [{}], 耗时: {}ms, 出参: {} =================================== ",
+            log.info("=== 请求结束: [{}], 耗时: {}ms, 出参: {} === ",
                     description, executionTime, JsonUtil.toJsonString(result));
 
             return result;
         } finally {
+            //清除MDC值
             MDC.clear();
         }
     }
