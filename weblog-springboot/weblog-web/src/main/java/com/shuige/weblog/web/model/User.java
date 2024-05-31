@@ -1,14 +1,19 @@
 package com.shuige.weblog.web.model;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.validation.constraints.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * @author felix
  * @date 2024/5/27 00:26
  */
 @Data
+@ApiModel(value = "用户实体类")
 public class User {
 
     //用户名
@@ -27,4 +32,14 @@ public class User {
     @NotBlank(message = "邮箱不能为空")
     @Email(message = "邮箱格式不正确")
     private String email;
+
+    //创建时间
+    private LocalDateTime createTime;
+
+    //更新日期
+    private LocalDate updateDate;
+
+    //时间
+    private LocalTime time;
+
 }

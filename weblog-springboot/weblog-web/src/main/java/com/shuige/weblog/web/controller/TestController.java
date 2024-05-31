@@ -3,8 +3,11 @@ package com.shuige.weblog.web.controller;
 import com.shuige.weblog.common.aspect.ApiOperationLog;
 import com.shuige.weblog.common.enums.ResponseCodeEnum;
 import com.shuige.weblog.common.exception.BizException;
+import com.shuige.weblog.common.utils.JsonUtil;
 import com.shuige.weblog.common.utils.Response;
 import com.shuige.weblog.web.model.User;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.stream.Collectors;
 
 /**
@@ -22,6 +28,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @Slf4j
+@Api(tags = "首页模块")
 public class TestController {
 
     @PostMapping("/test1")
@@ -74,5 +81,19 @@ public class TestController {
     @ApiOperationLog(description = "测试接口")
     public Response test6(@RequestBody @Validated User user) {
         return Response.success();
+    }
+
+    @PostMapping("/test7")
+    @ApiOperationLog(description = "测试接口Log")
+    @ApiOperation(value = "测试接口")
+    public Response test7(@RequestBody @Validated User user){
+
+        log.info(JsonUtil.toJsonString(user));
+
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateDate(LocalDate.now());
+        user.setTime(LocalTime.now());
+
+        return Response.success(user);
     }
 }

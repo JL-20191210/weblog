@@ -2,7 +2,3 @@ spring:
   profiles:
     # 默认激活dev环境
     active: dev
-
-mvc:
-  pathmatch:
-    matching-strategy: ant_path_matcher
