@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Api(tags = "首页模块")
 public class TestController {
 
-    @PostMapping("/test1")
+    @PostMapping("/admin/test1")
     @ApiOperationLog(description = "测试接口")
     public User test1(@RequestBody User user){
         return user;
