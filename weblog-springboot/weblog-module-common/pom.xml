@@ -25,10 +25,10 @@
         </dependency>
 
         <!-- 常用工具库 -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.google.guava</groupId>-->
+<!--            <artifactId>guava</artifactId>-->
+<!--        </dependency>-->
 
         <!-- 单元测试 -->
         <dependency>

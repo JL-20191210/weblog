@@ -1,10 +1,9 @@
-package com.shuige.weblog.jwt.pojo.vo;
+package com.shuige.weblog.jwt.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

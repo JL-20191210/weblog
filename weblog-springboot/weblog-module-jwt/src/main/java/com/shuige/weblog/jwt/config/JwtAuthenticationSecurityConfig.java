@@ -1,8 +1,8 @@
 package com.shuige.weblog.jwt.config;
 
 import com.shuige.weblog.jwt.filter.JwtAuthenticationFilter;
-import com.shuige.weblog.jwt.handler.RestAuthenticationSuccessHandler;
 import com.shuige.weblog.jwt.handler.RestAuthenticationFailureHandler;
+import com.shuige.weblog.jwt.handler.RestAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,11 +31,11 @@ public class JwtAuthenticationSecurityConfig extends SecurityConfigurerAdapter<D
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
-        //自定义用于JWT身份验证的过滤器
+        // 自定义的用于 JWT 身份验证的过滤器
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter();
         filter.setAuthenticationManager(httpSecurity.getSharedObject(AuthenticationManager.class));
 
-        //设置登录认证对应的处理类（成功处理，失败处理）
+        // 设置登录认证对应的处理类（成功处理、失败处理）
         filter.setAuthenticationSuccessHandler(restAuthenticationSuccessHandler);
         filter.setAuthenticationFailureHandler(restAuthenticationFailureHandler);
 

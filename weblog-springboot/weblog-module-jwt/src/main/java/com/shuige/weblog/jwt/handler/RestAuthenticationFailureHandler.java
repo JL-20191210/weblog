@@ -15,21 +15,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 @Component
 @Slf4j
 public class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.warn("AuthenticationException: ",exception);
-
-        if(exception instanceof UsernameOrPasswordNullException){
+        log.warn("AuthenticationException: ", exception);
+        if (exception instanceof UsernameOrPasswordNullException) {
             // 用户名或密码为空
             ResultUtil.fail(response, Response.fail(exception.getMessage()));
-        }else if(exception instanceof BadCredentialsException){
+        } else if (exception instanceof BadCredentialsException) {
             // 用户名或密码错误
-            ResultUtil.fail(response,Response.fail(ResponseCodeEnum.USERNAME_OR_PWD_ERROR));
+            ResultUtil.fail(response, Response.fail(ResponseCodeEnum.USERNAME_OR_PWD_ERROR));
         }
 
-        ResultUtil.fail(response,Response.fail(ResponseCodeEnum.LOGIN_FAIL));
+        // 登录失败
+        ResultUtil.fail(response, Response.fail(ResponseCodeEnum.LOGIN_FAIL));
     }
 }

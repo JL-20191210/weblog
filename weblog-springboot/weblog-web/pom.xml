@@ -15,6 +15,17 @@
     <description>webblog-web(入口项目，负责博客前台展示相关功能，打包也放在这个模块负责)</description>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.shuige</groupId>
+            <artifactId>weblog-module-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.shuige</groupId>
+            <artifactId>weblog-module-admin</artifactId>
+        </dependency>
+
         <!-- Web 依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,16 +46,7 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.shuige</groupId>
-            <artifactId>weblog-module-common</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.shuige</groupId>
-            <artifactId>weblog-module-admin</artifactId>
-        </dependency>
-
+        <!-- 参数校验 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>

@@ -1,6 +1,5 @@
 package com.shuige.weblog.jwt.exception;
 
-
 import org.springframework.security.core.AuthenticationException;
 
 public class UsernameOrPasswordNullException extends AuthenticationException {
@@ -8,7 +7,7 @@ public class UsernameOrPasswordNullException extends AuthenticationException {
         super(msg, cause);
     }
 
-    public UsernameOrPasswordNullException(String msg){
+    public UsernameOrPasswordNullException(String msg) {
         super(msg);
     }
 }
