@@ -7,6 +7,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,8 +29,13 @@ import java.util.Objects;
  * @date 2024/6/26 14:53
  */
 @Slf4j
-@SuppressWarnings("all")
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
+
+    @Value("${jwt.tokenPrefix}")
+    private String tokenPrefix;
+
+    @Value("${jwt.tokenHeaderKey}")
+    private String tokenHeaderKey;
 
     @Autowired
     JwtTokenHelper jwtTokenHelper;
@@ -54,11 +60,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //从请求头中获取Authorization字段，其中包含JWT令牌。
         //从请求头中获取key为Authorization的值
-        String header = request.getHeader("Authorization");
+        String header = request.getHeader(tokenHeaderKey);
 
 //        String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxdWFueGlhb2hhIiwiaXNzIjoic2h1aWdlIiwiaWF0IjoxNzE5Mzk0MDE2LCJleHAiOjE3MTkzOTc2MTZ9.MV4JIC1A0Mfm6gukLi5aNitQawFqW4xSvb2EGFlJRnUIyjxTcvH2mpuzZFQOomTiHYynnTlB2L-L_6fqT5egoA";
         // 检查令牌是否以Bearer开头。
-        if(StringUtils.startsWith(header,"Bearer")){
+        if(StringUtils.startsWith(header,tokenPrefix)){
             // 提取Bearer后面的JWT令牌。
             String token = StringUtils.substring(header,7);
             log.info("Token:{}",token);

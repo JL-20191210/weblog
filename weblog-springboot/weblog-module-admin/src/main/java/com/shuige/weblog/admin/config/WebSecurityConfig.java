@@ -5,6 +5,7 @@ import com.shuige.weblog.jwt.filter.TokenAuthenticationFilter;
 import com.shuige.weblog.jwt.handler.RestAccessDeniedHandler;
 import com.shuige.weblog.jwt.handler.RestAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -45,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);//将Token校验过滤器添加到用户认证过滤器之前
     }
 
-    private TokenAuthenticationFilter tokenAuthenticationFilter(){
+    @Bean
+    public TokenAuthenticationFilter tokenAuthenticationFilter(){
         return new TokenAuthenticationFilter();
     }
 }

@@ -16,13 +16,18 @@ import java.time.ZoneId;
 import java.util.Base64;
 
 /**
- * @author: 犬小哈
- * @url: www.quanxiaoha.com
- * @date: 2023-08-24 8:16
- * @description: JWT Token 工具类
- **/
+ * JWT工具类
+ * @author shuige
+ * @date 2024/6/26 22:51
+ */
 @Component
 public class JwtTokenHelper implements InitializingBean {
+
+    /**
+     * JWT令牌过期时间 分钟
+     */
+    @Value("${jwt.tokenExpireTime}")
+    private Long tokenExpireTime;
 
     /**
      * 签发人
@@ -68,8 +73,8 @@ public class JwtTokenHelper implements InitializingBean {
      */
     public String generateToken(String username) {
         LocalDateTime now = LocalDateTime.now();
-        // Token 一个小时后失效
-        LocalDateTime expireTime = now.plusHours(1);
+        // 设置token失效时间
+        LocalDateTime expireTime = now.plusMinutes(tokenExpireTime);
 
         return Jwts.builder().setSubject(username)
                 .setIssuer(issuer)

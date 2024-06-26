@@ -29,5 +29,11 @@ jwt:
   issuer: shuige
   # 秘钥
   secret: 1pWQRLxRlbAjctkp+yMUO9nMqrXEOqYFYCP/v3GsvuQOAW2ZMMztvZ/qPExap6H4jw2EYjbXM5zcqZPfPAKTrg==
+  #token 过期时间
+  tokenExpireTime: 1440
+  #token请求头中的Key值
+  tokenHeaderKey: Authorization
+  #token请求头中的value值前缀
+  tokenPrefix: Bearer
 server:
   port: 8081

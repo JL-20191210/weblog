@@ -28,15 +28,15 @@
           <el-form class="w-5/6 md:w-2/5">
             <el-form-item>
               <!-- 输入框组件 -->
-              <el-input size="large" placeholder="请输入用户名" :prefix-icon="User" clearable/>
+              <el-input size="large" placeholder="请输入用户名" v-model="form.username" :prefix-icon="User" clearable/>
             </el-form-item>
             <el-form-item>
               <!-- 密码框组件 -->
-              <el-input size="large" type="password" placeholder="请输入密码" :prefix-icon="Lock" clearable/>
+              <el-input size="large" type="password" placeholder="请输入密码" v-model="form.password" :prefix-icon="Lock" clearable/>
             </el-form-item>
             <el-form-item>
               <!-- 登录按钮，宽度设置100% -->
-              <el-button class="w-full" size="large" type="primary">登录</el-button>
+              <el-button class="w-full" size="large" type="primary" @click="onSubmit">登录</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -47,4 +47,21 @@
 <script setup> 
 // 引入 Element Plus 中的用户、锁图标
 import{ User,Lock } from '@element-plus/icons-vue'
+
+import { login } from '@/api/admin/user'
+import { reactive } from 'vue'
+
+//定义响应式的表单对象
+const form = reactive({
+  username: '',
+  password: '',
+})
+
+const onSubmit = ()=>{
+  console.log('登录')
+  login(form.username,form.password).then((res)=>{
+    console.log(res)
+  })
+}
+
 </script>
