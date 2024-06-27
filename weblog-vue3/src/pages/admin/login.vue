@@ -25,18 +25,18 @@
             <span class="h-[1px] w-16 bg-gray-200"></span>
           </div>
           <!-- 引入 Element Plus 表单组件，移动端设置宽度为 5/6，PC 端设置为 2/5 -->
-          <el-form class="w-5/6 md:w-2/5">
-            <el-form-item>
+          <el-form class="w-5/6 md:w-2/5" ref="formRef" :rules="rules" :model="form">
+            <el-form-item prop="username">
               <!-- 输入框组件 -->
               <el-input size="large" placeholder="请输入用户名" v-model="form.username" :prefix-icon="User" clearable/>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="password">
               <!-- 密码框组件 -->
-              <el-input size="large" type="password" placeholder="请输入密码" v-model="form.password" :prefix-icon="Lock" clearable/>
+              <el-input size="large" type="password" placeholder="请输入密码" v-model="form.password" :prefix-icon="Lock" clearable show-password/>
             </el-form-item>
             <el-form-item>
               <!-- 登录按钮，宽度设置100% -->
-              <el-button class="w-full" size="large" type="primary" @click="onSubmit">登录</el-button>
+              <el-button class="w-full" size="large" type="primary" @click="onSubmit" :loading="loading">登录</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -49,7 +49,10 @@
 import{ User,Lock } from '@element-plus/icons-vue'
 
 import { login } from '@/api/admin/user'
-import { reactive } from 'vue'
+import { ref,reactive,onMounted,onBeforeUnmount} from 'vue'
+import router from '@/router';
+import { showMessage } from '@/composables/util';
+import { setToken } from '@/composables/auth';
 
 //定义响应式的表单对象
 const form = reactive({
@@ -57,11 +60,86 @@ const form = reactive({
   password: '',
 })
 
-const onSubmit = ()=>{
-  console.log('登录')
-  login(form.username,form.password).then((res)=>{
-    console.log(res)
-  })
+//表单引用
+const formRef = ref(null)
+//登录按钮加载
+const loading = ref(false)
+
+//表单验证规则
+const rules = {
+  username:[
+    {
+      required:true,
+      message:'用户名不能为空',
+      trigger:'blur'
+    },
+  ],
+  password:[
+    {
+      required:true,
+      message:'密码不能为空',
+      trigger:'blur'
+    },
+  ]
 }
 
+
+const onSubmit = ()=>{
+  console.log('登录')
+  formRef.value.validate((valid)=>{
+    if(!valid){
+      console.log('表单验证不通过')
+      return false
+    }
+
+    //开始加载
+    loading.value = true
+
+    login(form.username,form.password).then((res)=>{
+    console.log(res)
+    //判断是否成功
+    if(res.success==true){
+
+      //提示登录成功
+      showMessage('登录成功')
+
+      //存储Token到Cookie中
+      let token = res.data.token
+      setToken(token)
+
+      //跳转到后台首页
+      router.push('/admin/index')
+    }else{
+      let message = res.message
+      //提示信息
+      showMessage(message,'error')
+    }
+  })
+  .finally(()=>{
+      //结束加载
+      loading.value = false
+  })
+  })
+
+
+}
+
+//按回车键后，执行登录事件
+function onKeyUp(e){
+  console.log(e)
+  if(e.key == 'Enter'){
+    onSubmit()
+  }
+}
+
+//添加键盘监听
+onMounted(()=>{
+  console.log('添加键盘监听')
+  document.addEventListener('keyup',onKeyUp)
+})
+
+//移除事件监听
+onBeforeUnmount(()=>{
+  document.removeEventListener('keyup',onKeyUp)
+})
 </script>
