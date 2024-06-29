@@ -1,6 +1,7 @@
 import Index from "@/pages/frontend/index.vue";
 import Login from '@/pages/admin/login.vue';
 import AdminIndex from '@/pages/admin/index.vue'
+import Admin from '@/layouts/admin/admin.vue';
 import {createRouter,createWebHashHistory} from 'vue-router'
 
 //统一在这里声明所有路由
@@ -20,11 +21,18 @@ const routes = [
         }
     },
     {
-        path:"/admin/index",//后台首页
-        component:AdminIndex,
-        meta:{
-            title:'Admin后台首页'
-        }
+        path:"/admin",//后台首页
+        component:Admin,//对应admin.vue的布局文件
+        // 使用到admin.vue布局的，都要放置在其子路由下面
+        children:[
+            {
+                path:"/admin/index",
+                component:AdminIndex,
+                meta:{
+                    title:"Admin后台首页"
+                }
+            }
+        ]
     },
 ]
 
