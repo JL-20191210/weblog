@@ -47,18 +47,20 @@
 <script setup> 
 // 引入 Element Plus 中的用户、锁图标
 import{ User,Lock } from '@element-plus/icons-vue'
-
 import { login } from '@/api/admin/user'
 import { ref,reactive,onMounted,onBeforeUnmount} from 'vue'
-import router from '@/router';
-import { showMessage } from '@/composables/util';
-import { setToken } from '@/composables/cookie';
+import router from '@/router'
+import { showMessage } from '@/composables/util'
+import { setToken } from '@/composables/cookie'
+import { useUserStore } from '@/stores/user'
 
 //定义响应式的表单对象
 const form = reactive({
   username: '',
   password: '',
 })
+
+const userStore = useUserStore()
 
 //表单引用
 const formRef = ref(null)
@@ -106,6 +108,9 @@ const onSubmit = ()=>{
       //存储Token到Cookie中
       let token = res.data.token
       setToken(token)
+
+      // 获取用户信息，并存储到全局状态中
+      userStore.setUserInfo()
 
       //跳转到后台首页
       router.push('/admin/index')

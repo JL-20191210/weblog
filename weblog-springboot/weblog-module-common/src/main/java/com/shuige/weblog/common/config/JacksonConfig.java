@@ -1,4 +1,4 @@
-package com.shuige.weblog.common;
+package com.shuige.weblog.common.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
