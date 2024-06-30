@@ -1,15 +1,22 @@
 <template>
-    <div class="bg-slate-800 h-screen text-white">
+    <div class="bg-slate-800 h-screen text-white menu-container transition-all" :style="{ width:menuStore.menuWidth }">
         <!-- 顶部 Logo, 指定高度为 64px, 和右边的 Header 头保持一样高 -->
         <div class="flex items-center justify-center h-[64px]">
-            logo
+            <img v-if="menuStore.menuWidth=='250px'" src="@/assets/weblog-logo.png" class="h-[200px] w-[300px]">
+            <img v-else src="@/assets/weblog-logo.png" class="h-[100px] w-[150px]">
         </div>
 
         <!-- 下方菜单 -->
-        <el-menu default-active="2" class="el-menu-vertical-demo">
-            <el-menu-item index="1-1">item one</el-menu-item>
-            <el-menu-item index="1-2">item two</el-menu-item>
-            <el-menu-item index="1-3">item three</el-menu-item>
+        <el-menu :default-active="defaultActive" class="el-menu-vertical-demo" @select="handleSelect" :collapse="isCollapse" :collapse-transition="false">
+            <template v-for="(item,index) in menus" :key="index">
+                <el-menu-item :index="item.path">
+                    <el-icon>
+                        <!-- 动态图标 -->
+                        <component :is="item.icon"></component>
+                    </el-icon>
+                    <span>{{item.name}}</span>
+                </el-menu-item>
+            </template>
       </el-menu>
 
 
@@ -47,3 +54,53 @@
     background-color: #ffffff10;
 }
 </style>
+
+<script setup>
+import { ref,computed } from 'vue'
+import { useRoute,useRouter } from 'vue-router'
+import { useMenuStore } from '@/stores/menu';
+
+const route = useRoute()
+const router = useRouter()
+//pinia
+const menuStore = useMenuStore()
+
+// 是否折叠
+const isCollapse = computed(()=>!(menuStore.menuWidth=='250px'))
+
+// 根据路由地址判断哪个菜单被选中
+const defaultActive = ref(route.path)
+
+// 菜单选择事件
+const handleSelect = (path)=>{
+    router.push(path)
+}
+
+const menus = [
+    {
+        'name':'仪表盘',
+        'icon':'Monitor',
+        'path':'/admin/index',
+    },
+    {
+        'name':'文章管理',
+        'icon':'Document',
+        'path':'/admin/article/list',
+    },
+    {
+        'name':'分类管理',
+        'icon':'FolderOpened',
+        'path':'/admin/category/list',
+    },
+    {
+        'name':'标签管理',
+        'icon':'PriceTag',
+        'path':'/admin/tag/list',
+    },
+    {
+        'name':'博客设置',
+        'icon':'Setting',
+        'path':'/admin/blog/setting',
+    },
+];
+</script>

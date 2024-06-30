@@ -1,5 +1,5 @@
 import router  from "@/router/index";
-import { getToken } from "@/composables/auth";
+import { getToken } from "@/composables/cookie";
 import { hidePageLoading, showMessage, showPageLoading } from "@/composables/util";
 
 // 全局路由前置守卫
