@@ -6,7 +6,7 @@
         <!-- 指定为 flex 布局，并设置为屏幕垂直水平居中，高度为 100% -->
         <div class="flex justify-center items-center h-full flex-col animate__animated animate__bounceInLeft animate__fast">
           <h2 class="font-bold text-4xl mb-7 text-white">博客登录</h2>
-          <p class="text-white">天之道损有余而补不足。人之道损不足而奉有余。</p>
+          <p class="text-white">霁日光风，草木欣欣</p>
           <!-- 指定图片宽度为父级元素的 1/2 -->
           <img src="@/assets/login.png" class="w-full">
         </div>

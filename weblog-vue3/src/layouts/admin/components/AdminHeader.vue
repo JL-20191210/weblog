@@ -34,7 +34,7 @@
             <el-dropdown class="flex items-center justify-center">
             <span class="el-dropdown-link flex items-center justify-center text-gray-700 text-xs">
                 <!-- 头像Avater -->
-                <el-avatar :size="25" src="https://img.quanxiaoha.com/quanxiaoha/f97361c0429d4bb1bc276ab835843065.jpg"/>
+                <el-avatar :size="25" src="https://img.picui.cn/free/2024/06/30/66810b089f214.jpg"/>
                 Admin
                 <el-icon class="el-icon--right">
                 <arrow-down />
