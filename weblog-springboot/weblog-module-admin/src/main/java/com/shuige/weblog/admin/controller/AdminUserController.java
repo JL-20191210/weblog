@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class AdminUserController {
     @PostMapping("/password/update")
     @ApiOperation(value = "修改用户密码")
     @ApiOperationLog(description = "修改用户密码")
-    public Response updatePassword(UpdateAdminUserPasswordReqVO updateAdminUserPasswordReqVO){
+    public Response updatePassword(@RequestBody UpdateAdminUserPasswordReqVO updateAdminUserPasswordReqVO){
         return adminUserService.updatePassword(updateAdminUserPasswordReqVO);
     }
 
