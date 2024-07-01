@@ -1,8 +1,11 @@
 package com.shuige.weblog.admin.controller;
 
 import com.shuige.weblog.admin.model.vo.category.AddCategoryReqVO;
+import com.shuige.weblog.admin.model.vo.category.DeleteCategoryReqVO;
+import com.shuige.weblog.admin.model.vo.category.FindCategoryPageListReqVO;
 import com.shuige.weblog.admin.service.AdminCategoryService;
 import com.shuige.weblog.common.aspect.ApiOperationLog;
+import com.shuige.weblog.common.utils.PageResponse;
 import com.shuige.weblog.common.utils.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,4 +32,24 @@ public class AdminCategoryController {
     }
 
 
+    @PostMapping("/category/list")
+    @ApiOperation(value = "查询分类列表分页数据")
+    @ApiOperationLog(description = "分类分页数据获取")
+    public PageResponse findCategoryPageList(@RequestBody @Validated FindCategoryPageListReqVO findCategoryPageListReqVO) {
+        return categoryService.findCategoryPageList(findCategoryPageListReqVO);
+    }
+
+    @PostMapping("/category/delete")
+    @ApiOperation(value = "删除分类")
+    @ApiOperationLog(description = "删除分类")
+    public Response deleteCategory(@RequestBody @Validated DeleteCategoryReqVO deleteCategoryReqVO) {
+        return categoryService.deleteCategory(deleteCategoryReqVO);
+    }
+
+    @PostMapping("/category/select/list")
+    @ApiOperation(value = "分类 Select 下拉列表数据获取")
+    @ApiOperationLog(description = "分类 Select 下拉列表数据获取")
+    public Response findCategorySelectList() {
+        return categoryService.findCategorySelectList();
+    }
 }
