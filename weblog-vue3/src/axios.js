@@ -35,7 +35,7 @@ instance.interceptors.response.use(function(response){
     // 对响应错误做点什么
 
     // 若后台有错误提示就用提示文字，默认提示为 '请求失败'
-    let errorMsg = error.response.data.mesage || '请求失败'
+    let errorMsg = error.response.data.message || '请求失败'
     // 弹错误提示
     showMessage(errorMsg,'error')
 

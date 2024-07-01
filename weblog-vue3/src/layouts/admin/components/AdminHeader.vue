@@ -178,7 +178,7 @@ const onSubmit = () => {
                 userStore.logout()
 
                 // 隐藏对话框
-                dialogVisible = false
+                dialogVisible.value = false
 
                 // 跳转登录页
                 router.push('/login')
