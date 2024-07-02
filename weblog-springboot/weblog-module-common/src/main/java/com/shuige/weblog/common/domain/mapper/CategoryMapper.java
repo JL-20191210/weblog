@@ -4,19 +4,27 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shuige.weblog.common.domain.dos.CategoryDO;
 
+/**
+ * @author felix
+ * @date 2024/7/1 11:29
+ */
 public interface CategoryMapper extends BaseMapper<CategoryDO> {
 
-    /**
-     * 根据用户名查询
+    /*
+     * @description: 根据分类名称查询分类
      * @param categoryName
-     * @return
+     * @return: com.shuige.weblog.common.domain.dos.CategoryDO
      */
-    default CategoryDO selectByName(String categoryName) {
-        // 构建查询条件
+    default CategoryDO selectByName(String categoryName){
+
+        /*
+         * @description: 根据分类名称查询分类
+         * @param categoryName
+         * @return: com.shuige.weblog.common.domain.dos.CategoryDO
+         */
         LambdaQueryWrapper<CategoryDO> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(CategoryDO::getName, categoryName);
 
-        // 执行查询
         return selectOne(wrapper);
     }
 }
