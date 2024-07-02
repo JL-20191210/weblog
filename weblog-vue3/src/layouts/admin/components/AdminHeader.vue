@@ -44,13 +44,13 @@
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
+                        <el-dropdown-item command="updatePasswordBtnClick">修改密码</el-dropdown-item>
                         <el-dropdown-item command="logout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
 
-            <el-dialog v-model="dialogVisible" title="修改密码" width="40%" :draggable="true" :close-on-click-modal="false"
+            <!-- <el-dialog v-model="dialogVisible" title="修改密码" width="40%" :draggable="true" :close-on-click-modal="false"
                 :close-on-press-escape="false">
                 <el-form ref="formRef" :model="form" :rules="rules">
                     <el-form-item label="用户名" prop="username" label-width="120px">
@@ -73,7 +73,22 @@
                         </el-button>
                     </div>
                 </template>
-            </el-dialog>
+            </el-dialog> -->
+            <FormDialog ref="formDialogRef" title="修改密码" destroyOnclose @submit="onSubmit">
+                <el-form ref="formRef" :model="form" :rules="rules">
+                    <el-form-item label="用户名" prop="username" label-width="120px">
+                        <el-input size="large" v-model="form.username" placeholder="请输入用户名" clearable disabled />
+                    </el-form-item>
+                    <el-form-item label="密码" prop="password" label-width="120px">
+                        <el-input size="large" type="password" v-model="form.password" placeholder="请输入密码" clearable
+                            show-password />
+                    </el-form-item>
+                    <el-form-item label="确认密码" prop="rePassword" label-width="120px">
+                        <el-input size="large" type="password" v-model="form.rePassword" placeholder="请确认密码" clearable
+                            show-password />
+                    </el-form-item>
+                </el-form>
+            </FormDialog>
         </div>
     </div>
 </template>
@@ -87,6 +102,7 @@ import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { showMessage, showModel } from '@/composables/util'
 import { updateAdminPassword } from '@/api/admin/user'
+import FormDialog from '@/components/FormDialog.vue'
 
 // isFullscreen 表示当前是否处于全屏；toggle 用于动态切换全屏、非全屏
 const { isFullscreen, toggle } = useFullscreen()
@@ -95,7 +111,9 @@ const menuStore = useMenuStore()
 const userStore = useUserStore()
 const router = useRouter()
 //对话框是否显示
-const dialogVisible = ref(false)
+// const dialogVisible = ref(false)
+const formDialogRef = ref(null)
+
 // 表单引用
 const formRef = ref(null)
 
@@ -133,9 +151,9 @@ const rules = {
 
 // 下拉菜单事件处理
 const handelCommand = (command) => {
-    if (command == 'updatePassword') {
+    if (command == 'updatePasswordBtnClick') {
         //修改密码
-        dialogVisible.value = true
+        formDialogRef.value.open()
     } else if (command == 'logout') {
         logout()
     }
@@ -178,7 +196,7 @@ const onSubmit = () => {
                 userStore.logout()
 
                 // 隐藏对话框
-                dialogVisible.value = false
+                formDialogRef.value.close()
 
                 // 跳转登录页
                 router.push('/login')
