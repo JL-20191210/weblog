@@ -23,14 +23,14 @@
         <el-card shadow="never">
             <!-- 新增按钮 -->
             <div class="mb-5">
-                <el-button type="primary" @click="dialogVisible = true">
+                <el-button type="primary" @click="addCategoryBtnClick">
                     <el-icon class="mr-1">
                         <Plus />
                     </el-icon>新增
                 </el-button>
             </div>
 
-            <el-dialog v-model="dialogVisible" title="添加文章分类" width="40%" :draggable="true" :close-on-click-modal="false"
+            <!-- <el-dialog v-model="dialogVisible" title="添加文章分类" width="40%" :draggable="true" :close-on-click-modal="false"
                 :close-on-press-escape="false">
                 <el-form ref="formRef" :model="form" :rules="rules">
                     <el-form-item label="分类名称" prop="name" label-width="80px">
@@ -45,7 +45,14 @@
                         </el-button>
                     </div>
                 </template>
-            </el-dialog>
+            </el-dialog> -->
+            <FormDialog ref="formDialogRef" title="添加文章分类" destroyOnclose @submit="onSubmit">
+                <el-form ref="formRef" :model="form" :rules="rules">
+                    <el-form-item label="分类名称" prop="name" label-width="80px">
+                        <el-input size="large" v-model="form.name" placeholder="请输入分类名称" clearable maxlength="20" show-word-limit />
+                    </el-form-item>
+                </el-form>
+            </FormDialog>
 
             <!-- 分页列表 -->
             <el-table :data="tableData" border stripe style="width: 100%">
@@ -75,6 +82,7 @@
 // 引入所需图标
 import { Search, RefreshRight } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
+import FormDialog from '@/components/FormDialog.vue'
 import moment from 'moment'
 import { start } from 'nprogress'
 import { addCategory,deleteCategory,getCategoryPageList } from '@/api/admin/category'
@@ -167,10 +175,17 @@ function getTableDate() {
 
 getTableDate()
 
-//对话框是否显示
-const dialogVisible = ref(false)
+
 // 表单引用
 const formRef = ref(null)
+
+//对话框是否显示
+// const dialogVisible = ref(false)
+const formDialogRef = ref(null)
+
+const addCategoryBtnClick = ()=>{
+    formDialogRef.value.open()
+}
 
 // 添加文章分类表单对象
 const form = reactive({
@@ -204,7 +219,7 @@ const onSubmit = ()=>{
                 // 将表单中分类名称置空
                 form.name = ''
                 // 隐藏对话框
-                dialogVisible.value = false
+                formDialogRef.value.close()
                 // 重新请求分页接口，渲染数据
                 getTableDate()
             }else{
@@ -233,5 +248,7 @@ const deleteCategorySubmit = (row)=>{
         console.log('取消了');
     })
 }
+
+
 
 </script>
