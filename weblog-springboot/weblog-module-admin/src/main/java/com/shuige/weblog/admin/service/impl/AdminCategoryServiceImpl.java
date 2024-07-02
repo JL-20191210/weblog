@@ -1,6 +1,6 @@
 package com.shuige.weblog.admin.service.impl;
 
-import com.shuige.weblog.admin.model.vo.category.AddCategoryReqVo;
+import com.shuige.weblog.admin.model.vo.category.AddCategoryReqVO;
 import com.shuige.weblog.admin.service.AdminCategoryService;
 import com.shuige.weblog.common.domain.dos.CategoryDO;
 import com.shuige.weblog.common.domain.mapper.CategoryMapper;
@@ -25,7 +25,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     private CategoryMapper categoryMapper;
 
     @Override
-    public Response addCategory(AddCategoryReqVo addCategoryReqVo) {
+    public Response addCategory(AddCategoryReqVO addCategoryReqVo) {
         String categoryName = addCategoryReqVo.getName();
 
         CategoryDO categoryDO = categoryMapper.selectByName(categoryName);

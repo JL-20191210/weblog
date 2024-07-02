@@ -9,15 +9,18 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * @author felix
+ * @date 2024/7/1 12:34
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "添加分类 VO")
+@ApiModel(value = "添加分类VO")
 public class AddCategoryReqVO {
 
     @NotBlank(message = "分类名称不能为空")
-    @Length(min = 1, max = 10, message = "分类名称字数限制 1 ~ 10 之间")
+    @Length(min = 1,max = 10,message = "分类名称字数限制 1～10之间")
     private String name;
-
 }

@@ -1,6 +1,7 @@
 package com.shuige.weblog.admin.service;
 
-import com.shuige.weblog.admin.model.vo.category.AddCategoryReqVo;
+import com.shuige.weblog.admin.model.vo.category.AddCategoryReqVO;
+import com.shuige.weblog.admin.model.vo.category.AddCategoryReqVO;
 import com.shuige.weblog.common.utils.Response;
 
 /**
@@ -14,5 +15,5 @@ public interface AdminCategoryService {
      * @param addCategoryReqVo
      * @return
      */
-    Response addCategory(AddCategoryReqVo addCategoryReqVo);
+    Response addCategory(AddCategoryReqVO addCategoryReqVo);
 }
