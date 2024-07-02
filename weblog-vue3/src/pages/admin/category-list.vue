@@ -55,7 +55,7 @@
             </FormDialog>
 
             <!-- 分页列表 -->
-            <el-table :data="tableData" border stripe style="width: 100%">
+            <el-table :data="tableData" border stripe style="width: 100%" v-loading="tableLoading">
                 <el-table-column prop="name" label="分类名称" width="180" />
                 <el-table-column prop="createTime" label="创建时间" width="180" />
                 <el-table-column label="操作">
@@ -92,6 +92,8 @@ import { showMessage, showModel } from '@/composables/util'
 const searchCategoryName = ref('')
 // 日期
 const pickDate = ref('')
+// 表格加载loading
+const tableLoading = ref(false)
 
 // 查询条件
 const startDate = reactive({})
@@ -160,6 +162,8 @@ const reset = ()=>{
 
 // 获取分页数据
 function getTableDate() {
+    // 显示表格loading
+    tableLoading.value = true
     // 调用后台分页接口，并传入所需参数
     getCategoryPageList({ current: current.value, size: size.value, startDate: startDate.value, endDate: endDate.value, name: searchCategoryName.value })
         .then((res) => {
@@ -171,6 +175,7 @@ function getTableDate() {
                 total.value = res.total
             }
         })
+        .finally(()=>tableLoading.value = false) // 隐藏表格 loading
 }
 
 getTableDate()
@@ -212,6 +217,9 @@ const onSubmit = ()=>{
             return false
         }
 
+        //显示提交按钮loading
+        formDialogRef.value.showBtnLoading()
+
         // 请求添加分类接口
         addCategory(form).then((res)=>{
             if(res.success == true){
@@ -228,7 +236,7 @@ const onSubmit = ()=>{
                 // 提示错误信息
                 showMessage(message,'error')
             }
-        })
+        }).finally(()=>formDialogRef.value.closeBtnLoading())// 隐藏提交按钮 loading
     })
 }
 

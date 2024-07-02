@@ -186,6 +186,8 @@ const onSubmit = () => {
             return
         }
 
+        formDialogRef.value.showBtnLoading()
+
         updateAdminPassword(form).then((res) => {
             console.log('form', form.password)
             console.log(res);
@@ -206,7 +208,7 @@ const onSubmit = () => {
                 // 提示消息
                 showMessage(message, 'error')
             }
-        })
+        }).finally(()=>formDialogRef.value.closeBtnloading())
     })
 }
 
