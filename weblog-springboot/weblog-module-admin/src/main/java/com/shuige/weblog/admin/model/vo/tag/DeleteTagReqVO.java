@@ -1,4 +1,4 @@
-package com.shuige.weblog.admin.model.vo.category;
+package com.shuige.weblog.admin.model.vo.tag;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "删除分类 VO")
-public class DeleteCategoryReqVO {
+@ApiModel(value = "删除标签 VO")
+public class DeleteTagReqVO {
 
-    @NotNull(message = "分类 ID 不能为空")
+    @NotNull(message = "标签 ID 不能为空")
     private Long id;
 
 }

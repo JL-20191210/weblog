@@ -1,6 +1,5 @@
 package com.shuige.weblog.common.utils;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.shuige.weblog.common.exception.BaseExceptionInterface;
 import com.shuige.weblog.common.exception.BizException;
 import lombok.Data;
@@ -32,6 +31,13 @@ public class Response<T> implements Serializable {
     public static <T> Response<T> success(T data){
         Response<T> response = new Response<>();
         response.setData(data);
+        return response;
+    }
+
+    public static <T> Response<T> success(T data,String message){
+        Response<T> response = new Response<>();
+        response.setData(data);
+        response.setMessage(message);
         return response;
     }
 

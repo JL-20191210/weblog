@@ -13,13 +13,14 @@ import java.time.LocalDateTime;
 /**
  * @author felix
  * @date 2024/7/1 11:18
+ * @description 分类
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@TableName("t_category")
-public class CategoryDO {
+@TableName("t_tag")
+public class TagDO {
 
     @TableId(type = IdType.AUTO)
     private Long id;

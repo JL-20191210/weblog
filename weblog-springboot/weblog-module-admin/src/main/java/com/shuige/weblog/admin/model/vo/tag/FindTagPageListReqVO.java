@@ -1,4 +1,4 @@
-package com.shuige.weblog.admin.model.vo.category;
+package com.shuige.weblog.admin.model.vo.tag;
 
 import com.shuige.weblog.common.model.BasePageQuery;
 import io.swagger.annotations.ApiOperation;
@@ -13,11 +13,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiOperation(value = "查询分类列表分页数据入参VO")
-public class FindCategoryPageListReqVO extends BasePageQuery {
+@ApiOperation(value = "查询标签列表分页数据入参VO")
+public class FindTagPageListReqVO extends BasePageQuery {
 
     /**
-     * 分类名称
+     * 标签名称
      */
     private String name;
 

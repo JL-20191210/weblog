@@ -17,20 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "后台用户模块")
 public class AdminUserController {
     @Autowired
-    private AdminUserService adminUserService;
+    private AdminUserService userService;
 
 
     @PostMapping("/password/update")
     @ApiOperation(value = "修改用户密码")
     @ApiOperationLog(description = "修改用户密码")
     public Response updatePassword(@RequestBody UpdateAdminUserPasswordReqVO updateAdminUserPasswordReqVO){
-        return adminUserService.updatePassword(updateAdminUserPasswordReqVO);
+        return userService.updatePassword(updateAdminUserPasswordReqVO);
     }
 
     @PostMapping("/user/info")
     @ApiOperation(value = "获取用户信息")
     @ApiOperationLog(description = "获取用户信息")
     public Response findUserInfo(){
-        return adminUserService.findUserInfo();
+        return userService.findUserInfo();
     }
 }

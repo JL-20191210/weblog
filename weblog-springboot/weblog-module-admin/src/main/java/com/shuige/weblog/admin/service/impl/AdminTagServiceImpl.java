@@ -1,129 +1,101 @@
 package com.shuige.weblog.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-import com.shuige.weblog.admin.model.vo.category.AddCategoryReqVO;
-import com.shuige.weblog.admin.model.vo.category.DeleteCategoryReqVO;
-import com.shuige.weblog.admin.model.vo.category.FindCategoryPageListReqVO;
-import com.shuige.weblog.admin.model.vo.category.FindCategoryPageListRspVO;
-import com.shuige.weblog.admin.service.AdminCategoryService;
-import com.shuige.weblog.common.domain.dos.CategoryDO;
-import com.shuige.weblog.common.domain.mapper.CategoryMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.shuige.weblog.admin.model.vo.tag.*;
+import com.shuige.weblog.admin.service.AdminTagService;
+import com.shuige.weblog.common.domain.dos.TagDO;
+import com.shuige.weblog.common.domain.mapper.TagMapper;
 import com.shuige.weblog.common.enums.ResponseCodeEnum;
-import com.shuige.weblog.common.exception.BizException;
 import com.shuige.weblog.common.model.vo.SelectRspVO;
 import com.shuige.weblog.common.utils.PageResponse;
 import com.shuige.weblog.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class AdminCategoryServiceImpl implements AdminCategoryService {
+public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implements AdminTagService {
 
     @Autowired
-    private CategoryMapper categoryMapper;
+    private TagMapper tagMapper;
 
-    /**
-     * 添加分类
-     *
-     * @param addCategoryReqVO
-     * @return
-     */
     @Override
-    public Response addCategory(AddCategoryReqVO addCategoryReqVO) {
-        String categoryName = addCategoryReqVO.getName();
-
-        // 先判断该分类是否已经存在
-        CategoryDO categoryDO = categoryMapper.selectByName(categoryName);
-
-        if (Objects.nonNull(categoryDO)) {
-            log.warn("分类名称： {}, 此分类已存在", categoryName);
-            throw new BizException(ResponseCodeEnum.CATEGORY_NAME_IS_EXISTED);
+    public Response addTags(AddTagReqVO addTagReqVO) {
+        // 将标签集合转换为DO
+        List<TagDO> tagDOS = addTagReqVO.getTags().stream()
+                .map(tagName->TagDO.builder()
+                        .name(tagName.trim())
+                        .createTime(LocalDateTime.now())
+                        .updateTime(LocalDateTime.now())
+                        .build())
+                .collect(Collectors.toList());
+        // 批量保存
+        try {
+            saveBatch(tagDOS);
+        } catch (Exception e) {
+            log.warn("标签已存在",e);
         }
-
-        // 构建 DO 类
-        CategoryDO insertCategoryDO = CategoryDO.builder()
-                .name(addCategoryReqVO.getName().trim())
-                .build();
-
-        // 执行 insert
-        categoryMapper.insert(insertCategoryDO);
-
-        return Response.success();
+        return Response.success(tagDOS,"添加标签成功");
     }
 
     @Override
-    public PageResponse findCategoryPageList(FindCategoryPageListReqVO findCategoryPageListReqVO) {
-        Long current = findCategoryPageListReqVO.getCurrent();
-        Long size = findCategoryPageListReqVO.getSize();
+    public PageResponse findTagPageList(FindTagPageListReqVO findTagPageListReqVO) {
+        Long current = findTagPageListReqVO.getCurrent();
+        Long size = findTagPageListReqVO.getSize();
+        String name = findTagPageListReqVO.getName();
+        LocalDate startDate = findTagPageListReqVO.getStartDate();
+        LocalDate endDate = findTagPageListReqVO.getEndDate();
 
-        Page<CategoryDO> page = new Page<>(current, size);
+        // 查询
+        Page<TagDO> page = tagMapper.selectPageList(current, size, name, startDate, endDate);
 
-        LambdaQueryWrapper<CategoryDO> wrapper = new LambdaQueryWrapper<>();
+        List<TagDO> records = page.getRecords();
 
-        String name = findCategoryPageListReqVO.getName();
-        LocalDate startDate = findCategoryPageListReqVO.getStartDate();
-        LocalDate endDate = findCategoryPageListReqVO.getEndDate();
-
-        wrapper
-                .like(StringUtils.isNotBlank(name),CategoryDO::getName,name.trim())
-                .ge(Objects.nonNull(startDate),CategoryDO::getCreateTime,startDate)
-                .le(Objects.nonNull(endDate),CategoryDO::getCreateTime,endDate)
-                .orderByDesc(CategoryDO::getCreateTime);
-
-        Page<CategoryDO> categoryDOPage = categoryMapper.selectPage(page, wrapper);
-
-        List<CategoryDO> categoryDOS = categoryDOPage.getRecords();
-
-        List<FindCategoryPageListRspVO> vos = null;
-        if(!CollectionUtils.isEmpty(categoryDOS)){
-            vos = categoryDOS.stream()
-                    .map(categoryDO -> FindCategoryPageListRspVO.builder()
-                            .id(categoryDO.getId())
-                            .name(categoryDO.getName())
-                            .createTime(categoryDO.getCreateTime())
+        //do 转 vo
+        List <FindTagPageListRspVO> vos = null;
+        if(!CollectionUtils.isEmpty(records)){
+            vos = records.stream()
+                    .map(tagDO -> FindTagPageListRspVO.builder()
+                            .id(tagDO.getId())
+                            .name(tagDO.getName())
+                            .createTime(tagDO.getCreateTime())
                             .build())
                     .collect(Collectors.toList());
         }
-
-        return PageResponse.success(categoryDOPage,vos);
+        return PageResponse.success(page,vos);
     }
 
     @Override
-    public Response deleteCategory(DeleteCategoryReqVO deleteCategoryReqVO) {
-        // 执行删除
-        Long id = deleteCategoryReqVO.getId();
-        categoryMapper.deleteById(id);
+    public Response deleteTag(DeleteTagReqVO deleteTagReqVO) {
+        Long id = deleteTagReqVO.getId();
 
-        return Response.success();
+        int count = tagMapper.deleteById(id);
+        return count==1?Response.success():Response.fail(ResponseCodeEnum.TAG_NOT_EXIST);
     }
 
     @Override
-    public Response findCategorySelectList() {
-        //查询所有分类
-        List<CategoryDO> categoryDOS = categoryMapper.selectList(null);
+    public Response searchTag(SearchTagReqVO searchTagReqVO) {
+        String key = searchTagReqVO.getKey();
 
-        List<SelectRspVO> selectRspVOS = null;
+        List<TagDO> tagDOS = tagMapper.selectByKey(key);
 
-        if(!CollectionUtils.isEmpty(categoryDOS)){
-            selectRspVOS = categoryDOS.stream()
-                    .map(categoryDO -> SelectRspVO.builder()
-                            .label(categoryDO.getName())
-                            .value(categoryDO.getId())
+        List<SelectRspVO> vos = null;
+        if(!CollectionUtils.isEmpty(tagDOS)){
+            vos = tagDOS.stream()
+                    .map(tagDO -> SelectRspVO.builder()
+                            .label(tagDO.getName())
+                            .value(tagDO.getId())
                             .build())
                     .collect(Collectors.toList());
         }
-
-        return Response.success(selectRspVOS);
+        return Response.success(vos);
     }
 }

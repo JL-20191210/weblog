@@ -2,29 +2,43 @@ package com.shuige.weblog.common.domain.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.shuige.weblog.common.domain.dos.CategoryDO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.shuige.weblog.common.domain.dos.TagDO;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author felix
  * @date 2024/7/1 11:29
  */
-public interface CategoryMapper extends BaseMapper<CategoryDO> {
+public interface TagMapper extends BaseMapper<TagDO> {
 
-    /*
-     * @description: 根据分类名称查询分类
-     * @param categoryName
-     * @return: com.shuige.weblog.common.domain.dos.CategoryDO
+    default Page<TagDO> selectPageList(long current, long size, String name, LocalDate startDate,LocalDate endTDate){
+        //分页对象
+        Page<TagDO> page = new Page<>(current, size);
+
+        // 构造查询条件
+        LambdaQueryWrapper<TagDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper
+                .like(Objects.nonNull(name),TagDO::getName,name)
+                .ge(Objects.nonNull(startDate),TagDO::getCreateTime,startDate)
+                .le(Objects.nonNull(endTDate),TagDO::getCreateTime,endTDate)
+                .orderByDesc(TagDO::getCreateTime);
+        return selectPage(page,wrapper);
+    }
+
+    /**
+     * 根据标签关键字查询
+     * @param key
+     * @return
      */
-    default CategoryDO selectByName(String categoryName){
+    default List<TagDO> selectByKey(String key){
+        LambdaQueryWrapper<TagDO> wrapper = new LambdaQueryWrapper<>();
 
-        /*
-         * @description: 根据分类名称查询分类
-         * @param categoryName
-         * @return: com.shuige.weblog.common.domain.dos.CategoryDO
-         */
-        LambdaQueryWrapper<CategoryDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(CategoryDO::getName, categoryName);
-
-        return selectOne(wrapper);
+        // 构造模糊查询条件
+        wrapper.like(TagDO::getName,key).orderByDesc(TagDO::getCreateTime);
+        return selectList(wrapper);
     }
 }

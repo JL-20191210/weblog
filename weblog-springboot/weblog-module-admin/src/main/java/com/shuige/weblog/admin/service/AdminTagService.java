@@ -1,36 +1,40 @@
 package com.shuige.weblog.admin.service;
 
-import com.shuige.weblog.admin.model.vo.category.AddCategoryReqVO;
-import com.shuige.weblog.admin.model.vo.category.DeleteCategoryReqVO;
-import com.shuige.weblog.admin.model.vo.category.FindCategoryPageListReqVO;
+
+import com.shuige.weblog.admin.model.vo.tag.AddTagReqVO;
+import com.shuige.weblog.admin.model.vo.tag.DeleteTagReqVO;
+import com.shuige.weblog.admin.model.vo.tag.FindTagPageListReqVO;
+import com.shuige.weblog.admin.model.vo.tag.SearchTagReqVO;
 import com.shuige.weblog.common.utils.PageResponse;
 import com.shuige.weblog.common.utils.Response;
 
-public interface AdminCategoryService {
-    /**
-     * 添加分类
-     * @param addCategoryReqVO
-     * @return
-     */
-    Response addCategory(AddCategoryReqVO addCategoryReqVO);
+public interface AdminTagService {
 
     /**
-     * 分页查询分类列表
-     * @param findCategoryPageListReqVO
+     * 添加标签集合
+     * @param addTagReqVO
      * @return
      */
-    PageResponse findCategoryPageList(FindCategoryPageListReqVO findCategoryPageListReqVO);
+    Response addTags(AddTagReqVO addTagReqVO);
 
     /**
-     * 删除分类
-     * @param deleteCategoryReqVO
+     * 查询标签列表
+     * @param findTagPageListReqVO
      * @return
      */
-    Response deleteCategory(DeleteCategoryReqVO deleteCategoryReqVO);
+    PageResponse findTagPageList(FindTagPageListReqVO findTagPageListReqVO);
 
     /**
-     * 获取文章分类的 Select 列表数据
+     * 删除标签
+     * @param deleteTagReqVO
      * @return
      */
-    Response findCategorySelectList();
+    Response deleteTag(DeleteTagReqVO deleteTagReqVO);
+
+    /**
+     * 标签模糊查询
+     * @param searchTagReqVO
+     * @return
+     */
+    Response searchTag(SearchTagReqVO searchTagReqVO);
 }
