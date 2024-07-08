@@ -3,7 +3,7 @@
     <el-container>
 
         <!-- 左边侧边栏 -->
-        <el-aside>
+        <el-aside :width='menuStore.menuWidth'>
             <AdminMenu></AdminMenu>
             左边侧边栏
         </el-aside>
@@ -30,15 +30,18 @@
 </template>
 
 <script setup>
-    //引入组件 
-    import AdminMenu from './components/AdminMenu.vue'
-    import AdminHeader from './components/AdminHeader.vue'
-    import AdminTagList from './components/AdminTagList.vue'
-    import AdminFooter from './components/AdminFooter.vue'
+//引入组件 
+import AdminMenu from './components/AdminMenu.vue'
+import AdminHeader from './components/AdminHeader.vue'
+import AdminTagList from './components/AdminTagList.vue'
+import AdminFooter from './components/AdminFooter.vue'
+import { useMenuStore } from '@/stores/menu'
+
+const menuStore = useMenuStore()
 </script>
 
 <style scoped>
-    .el-header {
-        padding: 0!important;
-    }
+.el-header {
+    padding: 0 !important;
+}
 </style>
