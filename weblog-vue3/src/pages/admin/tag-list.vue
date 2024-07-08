@@ -30,35 +30,20 @@
                     </el-icon>新增
                 </el-button>
             </div>
-
-            <!-- <el-dialog v-model="dialogVisible" title="添加文章标签" width="40%" :draggable="true" :close-on-click-modal="false"
-                :close-on-press-escape="false">
-                <el-form ref="formRef" :model="form" :rules="rules">
-                    <el-form-item label="标签名称" prop="name" label-width="80px">
-                        <el-input size="large" v-model="form.name" placeholder="请输入标签名称" clearable maxlength="20" show-word-limit />
-                    </el-form-item>
-                </el-form>
-                <template #footer>
-                    <div class="dialog-footer">
-                        <el-button @click="dialogVisible = false">取消</el-button>
-                        <el-button type="primary" @click="onSubmit">
-                            提交
-                        </el-button>
-                    </div>
-                </template>
-</el-dialog> -->
             <FormDialog ref="formDialogRef" title="添加文章标签" destroyOnclose @submit="onSubmit">
                 <el-form ref="formRef" :model="form">
-                    <el-form-item  prop="name" size="large">
-                        <el-tag v-for="tag in dynamicTags" :key="tag" closable :disable-transitions="false"
+                    <el-form-item prop="name" size="small">
+                        <el-tag v-for="tag in dynamicTags" :key="tag" class="mx-1" closable :disable-transitions="false"
                             @close="handleClose(tag)">
                             {{ tag }}
                         </el-tag>
-                        <el-input v-if="inputVisible" ref="InputRef" v-model="inputValue" class="w-20" size="small"
-                            @keyup.enter="handleInputConfirm" @blur="handleInputConfirm" />
-                        <el-button v-else class="button-new-tag" size="small" @click="showInput">
-                            新增标签
-                        </el-button>
+                        <span class="w-20">
+                            <el-input v-if="inputVisible" ref="InputRef" v-model="inputValue" class="ml-1 w-20" size="small"
+                                @keyup.enter="handleInputConfirm" @blur="handleInputConfirm" />
+                            <el-button v-else class="button-new-tag" size="small" @click="showInput">
+                                +新增标签
+                            </el-button>
+                        </span>
                     </el-form-item>
                 </el-form>
             </FormDialog>
@@ -95,11 +80,10 @@
 // 引入所需图标
 import { Search, RefreshRight } from '@element-plus/icons-vue'
 import { ElInput } from 'element-plus'
-import { reactive, ref,nextTick } from 'vue'
+import { reactive, ref, nextTick } from 'vue'
 import FormDialog from '@/components/FormDialog.vue'
 import moment from 'moment'
-import { start } from 'nprogress'
-import { getTagPageList, addTags, deleteTag } from '@/api/admin/tag'
+import { getTagPageList, addTag, deleteTag } from '@/api/admin/tag'
 import { showMessage, showModel } from '@/composables/util'
 
 // 分页查询的标签名称
@@ -208,26 +192,22 @@ const addTagsBtnClick = () => {
 
 // 添加文章标签表单对象
 const form = reactive({
-    name: ''
+    tags: []
 })
 
 const onSubmit = () => {
     // 先验证form表单字段
     formRef.value.validate((valid) => {
-        if (!valid) {
-            console.log('表单验证不通过');
-            return false
-        }
-
         //显示提交按钮loading
         formDialogRef.value.showBtnLoading()
-
+        form.tags = dynamicTags.value
         // 请求添加标签接口
-        addTags(form).then((res) => {
+        addTag(form).then((res) => {
             if (res.success == true) {
                 showMessage('添加成功')
-                // 将表单中标签名称置空
-                form.name = ''
+                // 将表单中标签数组置空
+                form.tag = []
+                dynamicTags.value = []
                 // 隐藏对话框
                 formDialogRef.value.close()
                 // 重新请求分页接口，渲染数据
@@ -267,22 +247,22 @@ const inputVisible = ref(false)
 const InputRef = ref('')
 
 const handleClose = (tag) => {
-  dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
+    dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
 }
 
 const showInput = () => {
-  inputVisible.value = true
-  nextTick(() => {
-    InputRef.value.input.focus()
-  })
+    inputVisible.value = true
+    nextTick(() => {
+        InputRef.value.input.focus()
+    })
 }
 
 const handleInputConfirm = () => {
-  if (inputValue.value) {
-    dynamicTags.value.push(inputValue.value)
-  }
-  inputVisible.value = false
-  inputValue.value = ''
+    if (inputValue.value) {
+        dynamicTags.value.push(inputValue.value)
+    }
+    inputVisible.value = false
+    inputValue.value = ''
 }
 
 </script>

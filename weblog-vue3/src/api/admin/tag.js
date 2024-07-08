@@ -6,7 +6,7 @@ export function getTagPageList(data){
 }
 
 // 添加标签
-export function addTags(data){
+export function addTag(data){
     return axios.post("/admin/tag/add",data)
 }
 
