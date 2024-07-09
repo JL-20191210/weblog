@@ -2,7 +2,7 @@
     <div>
         <!-- 卡片组件， shadow="never" 指定 card 卡片组件没有阴影 -->
         <el-card shadow="never">
-            <el-form :model="form" label-width="160px" :rules="rules">
+            <el-form ref="formRef" :model="form" label-width="160px" :rules="rules">
                 <el-form-item label="博客名称" prop="name">
                     <el-input v-model="form.name" clearable></el-input>
                 </el-form-item>
@@ -11,8 +11,8 @@
                 </el-form-item>
                 <el-form-item label="博客 LOGO" prop="logo">
                     <el-upload class="avatar-uploader"
-                        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :show-file-list="false"
-                        :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                        action="#" :show-file-list="false"
+                        :on-change="handleLogoChange" :auto-upload="false">
                         <img v-if="form.logo" :src="form.logo" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
@@ -21,8 +21,8 @@
                 </el-form-item>
                 <el-form-item label="作者头像" prop="avatar">
                     <el-upload class="avatar-uploader"
-                        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" :show-file-list="false"
-                        :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                        action="#" :show-file-list="false"
+                        :on-change="handleAvatarChange" :auto-upload="false">
                         <img v-if="form.avatar" :src="form.avatar" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
@@ -66,7 +66,7 @@
                     <el-input v-model="form.csdnHomepage" clearable placeholder="请输入 CSDN 主页访问的 URL" />
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">保存</el-button>
+                    <el-button type="primary" @click="onSubmit" :loading="btnLoading">保存</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -76,7 +76,9 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { Check, Close } from '@element-plus/icons-vue'
-import { getBlogSettingDetail} from '@/api/admin/blogsettings'
+import { getBlogSettingDetail,updateBlogSettings } from '@/api/admin/blogsettings'
+import { uploadFile } from '@/api/admin/file'
+import { showMessage } from '@/composables/util'
 
 // 表单对象
 const form = reactive({
@@ -99,6 +101,12 @@ const isGiteeChecked = ref(false)
 const isZhihuChecked = ref(false)
 // 是否开启 CSDN
 const isCSDNChecked = ref(false)
+
+// 是否显示保存按钮的loading状态，默认为false
+const btnLoading = ref(false)
+
+// 表单引用
+const formRef = ref(null)
 
 // 监听 Github Switch 改变事件
 const githubSwitchChange = (checked) => {
@@ -135,6 +143,80 @@ const rules = {
     logo: [{ required: true, message: '请上传博客 LOGO', trigger: 'blur' }],
     avatar: [{ required: true, message: '请上传作者头像', trigger: 'blur' }],
     introduction: [{ required: true, message: '请输入介绍语', trigger: 'blur' }],
+}
+
+//上传logo图片
+const handleLogoChange = (file)=>{
+    //表单对象
+    let formData = new FormData()
+
+    //添加file字段，并将文件传入
+    formData.append('file',file.raw)
+
+    uploadFile(formData).then((e)=>{
+        // 响参数失败，提示错误信息
+        if(e.success == false){
+            let message = e.message
+            showMessage(message,'error')
+            return
+        }
+
+        //成功则设置logo链接，并提示成功
+        form.logo = e.data.url
+        showMessage('上传成功')
+    })
+
+
+
+}
+
+//上传头像图片
+const handleAvatarChange = (file)=>{
+    //表单对象
+    let formData = new FormData()
+
+    //添加file字段，并将文件传入
+    formData.append('file',file.raw)
+
+    uploadFile(formData).then((e)=>{
+        // 响参数失败，提示错误信息
+        if(e.success == false){
+            let message = e.message
+            showMessage(message,'error')
+            return
+        }
+
+        //成功则设置logo链接，并提示成功
+        form.avatar = e.data.url
+        showMessage('上传成功')
+    })
+
+
+
+}
+
+const onSubmit = ()=>{
+    // 先验证form表单字段
+    formRef.value.validate((valid)=>{
+        if(!valid){
+            console.log('表单验证不通过');
+            return false
+        }
+
+        // 显示保存按钮loading
+        btnLoading.value = true
+        updateBlogSettings(form).then((res)=>{
+            if(res.success == false){
+                let message = res.message
+                showMessage(message,'error')
+                return
+            }
+
+            // 重新渲染页面中的信息
+            initBlogSettings()
+            showMessage('保存成功')
+        }).finally(()=>btnLoading.value=false)// 隐藏保存按钮loading
+    })
 }
 
 //初始化博客设置数据并渲染到页面上
