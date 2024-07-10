@@ -1,5 +1,6 @@
 package com.shuige.weblog.admin.service.impl;
 
+import com.google.common.collect.Lists;
 import com.shuige.weblog.admin.model.vo.article.PublishArticleReqVO;
 import com.shuige.weblog.admin.service.AdminArticleService;
 import com.shuige.weblog.common.domain.dos.*;
@@ -14,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +41,9 @@ public class AdminArticleServiceImpl implements AdminArticleService {
 
     @Autowired
     private TagMapper tagMapper;
+
+    @Autowired
+    private ArticleTagRelMapper articleTagRelMapper;
 
     /**
      * 发布文章
@@ -113,6 +116,62 @@ public class AdminArticleServiceImpl implements AdminArticleService {
             // 否则则是不存在的
             notExistTags = publishTags.stream().filter(publishTag->!tagIds.contains(publishTag)).collect(Collectors.toList());
 
+            // 补充逻辑
+            // 还有一种逻辑：按字符串名称提交上来的标签，也有可能是表中已经存在的，比如表中已经有了Java标签，用户提交了个Java小写的标签，需要内部替换为Java标签
+            Map<String,Long> tagNameIdMap = tagDOS.stream().collect(Collectors.toMap(tagDO -> tagDO.getName().toLowerCase(),TagDO::getId));
+
+            // 使用迭代器进行安全的删除操作
+            Iterator<String> iterator = notExistTags.iterator();
+            while (iterator.hasNext()){
+                String notExistTag = iterator.next();
+                // 转小写，若map中存在相同的key，则表示该标签是重复标签
+                if(tagNameIdMap.containsKey(notExistTag.toLowerCase())){
+                    // 从不存在的标签集合中清除
+                    iterator.remove();
+                    // 并将对应的ID添加到已存在的标签集合中
+                    existedTags.add(String.valueOf(tagNameIdMap.get(notExistTag.toLowerCase())));
+                }
+            }
+
+            // 将提交上来的，已存在于表中的标签，文章-标签关联关系入库
+            if(!CollectionUtils.isEmpty(existedTags)){
+                List<ArticleTagRelDO>  articleTagRelDOS = Lists.newArrayList();
+                existedTags.forEach(tagId->{
+                    ArticleTagRelDO articleTagRelDO = ArticleTagRelDO.builder()
+                            .articleId(articleId)
+                            .tagId(Long.valueOf(tagId))
+                            .build();
+                    articleTagRelDOS.add(articleTagRelDO);
+                });
+                articleTagRelMapper.insertBatchSomeColumn(articleTagRelDOS);
+            }
+
+            // 将提交的上来的，不存在于表中的标签，入库保存
+            if(!CollectionUtils.isEmpty(notExistTags)){
+                List<ArticleTagRelDO> articleTagRelDOS = Lists.newArrayList();
+                notExistTags.forEach(tagName->{
+                    TagDO tagDO = TagDO.builder()
+                            .name(tagName)
+                            .createTime(LocalDateTime.now())
+                            .updateTime(LocalDateTime.now())
+                            .build();
+
+                    tagMapper.insert(tagDO);
+
+                    // 拿到保存的标签ID
+                    Long tagId = tagDO.getId();
+
+                    // 文章-标签关联关系
+                    ArticleTagRelDO articleTagRelDO = ArticleTagRelDO.builder()
+                            .articleId(articleId)
+                            .tagId(tagId)
+                            .build();
+
+                    articleTagRelDOS.add(articleTagRelDO);
+                    // 批量插入
+                    articleTagRelMapper.insertBatchSomeColumn(articleTagRelDOS);
+                });
+            }
         }
     }
 }
