@@ -18,4 +18,13 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
     default int deleteByArticleIdInt(Long articleId){
         return delete(Wrappers.<ArticleCategoryRelDO>lambdaQuery().eq(ArticleCategoryRelDO::getArticleId,articleId));
     }
+
+    /**
+     * 根据文章id查询
+     * @param articleId
+     * @return
+     */
+    default ArticleCategoryRelDO selectByArticleId(Long articleId){
+        return selectOne(Wrappers.<ArticleCategoryRelDO>lambdaQuery().eq(ArticleCategoryRelDO::getArticleId,articleId));
+    }
 }

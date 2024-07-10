@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.shuige.weblog.common.config.InsertBatchMapper;
 import com.shuige.weblog.common.domain.dos.ArticleTagRelDO;
 
+import java.util.List;
+
 /**
  * @author felix
  * @date 2024/7/9 14:34
@@ -17,5 +19,14 @@ public interface ArticleTagRelMapper extends InsertBatchMapper<ArticleTagRelDO> 
      */
     default int deleteByArticleIdInt(Long articleId){
         return delete(Wrappers.<ArticleTagRelDO>lambdaQuery().eq(ArticleTagRelDO::getArticleId,articleId));
+    }
+
+    /**
+     * 根据文章id查询
+     * @param articleId
+     * @return
+     */
+    default List<ArticleTagRelDO> selectByArticleId(Long articleId){
+        return selectList(Wrappers.<ArticleTagRelDO>lambdaQuery().eq(ArticleTagRelDO::getArticleId,articleId));
     }
 }

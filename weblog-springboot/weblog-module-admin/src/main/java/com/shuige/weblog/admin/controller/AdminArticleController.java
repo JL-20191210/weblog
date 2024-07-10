@@ -1,8 +1,6 @@
 package com.shuige.weblog.admin.controller;
 
-import com.shuige.weblog.admin.model.vo.article.DeleteArticleReqVO;
-import com.shuige.weblog.admin.model.vo.article.FindArticlePageListReqVO;
-import com.shuige.weblog.admin.model.vo.article.PublishArticleReqVO;
+import com.shuige.weblog.admin.model.vo.article.*;
 import com.shuige.weblog.admin.service.AdminArticleService;
 import com.shuige.weblog.common.aspect.ApiOperationLog;
 import com.shuige.weblog.common.utils.Response;
@@ -46,5 +44,19 @@ public class AdminArticleController {
     @ApiOperationLog(description = "查询文章分页数据")
     public Response findArticlePageList(@RequestBody @Validated FindArticlePageListReqVO findArticlePageListReqVO) {
         return articleService.findArticlePageList(findArticlePageListReqVO);
+    }
+
+    @PostMapping("/detail")
+    @ApiOperation(value = "查询文章详情")
+    @ApiOperationLog(description = "查询文章详情")
+    public Response findArticleDetail(@RequestBody @Validated FindArticleDetailReqVO findArticlePageListReqVO) {
+        return articleService.findArticleDetail(findArticlePageListReqVO);
+    }
+
+    @PostMapping("/update")
+    @ApiOperation(value = "更新文章")
+    @ApiOperationLog(description = "更新文章")
+    public Response updateArticle(@RequestBody @Validated UpdateArticleReqVO updateArticleReqVO) {
+        return articleService.updateArticle(updateArticleReqVO);
     }
 }

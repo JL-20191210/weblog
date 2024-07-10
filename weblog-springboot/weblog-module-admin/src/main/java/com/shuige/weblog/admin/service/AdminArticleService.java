@@ -1,8 +1,6 @@
 package com.shuige.weblog.admin.service;
 
-import com.shuige.weblog.admin.model.vo.article.DeleteArticleReqVO;
-import com.shuige.weblog.admin.model.vo.article.FindArticlePageListReqVO;
-import com.shuige.weblog.admin.model.vo.article.PublishArticleReqVO;
+import com.shuige.weblog.admin.model.vo.article.*;
 import com.shuige.weblog.common.utils.Response;
 
 /**
@@ -26,4 +24,8 @@ public interface AdminArticleService {
     Response deleteArticle(DeleteArticleReqVO deleteArticleReqVO);
 
     Response findArticlePageList(FindArticlePageListReqVO findArticlePageListReqVO);
+
+    Response findArticleDetail(FindArticleDetailReqVO findArticleDetailReqVO);
+
+    Response updateArticle(UpdateArticleReqVO updateArticleReqVO);
 }
