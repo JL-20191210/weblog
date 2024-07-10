@@ -1,12 +1,17 @@
 package com.shuige.weblog.admin.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
+import com.shuige.weblog.admin.model.vo.article.DeleteArticleReqVO;
+import com.shuige.weblog.admin.model.vo.article.FindArticlePageListReqVO;
+import com.shuige.weblog.admin.model.vo.article.FindArticlePageListRspVO;
 import com.shuige.weblog.admin.model.vo.article.PublishArticleReqVO;
 import com.shuige.weblog.admin.service.AdminArticleService;
 import com.shuige.weblog.common.domain.dos.*;
 import com.shuige.weblog.common.domain.mapper.*;
 import com.shuige.weblog.common.enums.ResponseCodeEnum;
 import com.shuige.weblog.common.exception.BizException;
+import com.shuige.weblog.common.utils.PageResponse;
 import com.shuige.weblog.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -91,6 +97,54 @@ public class AdminArticleServiceImpl implements AdminArticleService {
         insertTags(articleId,publishTags);
 
         return Response.success();
+    }
+
+    /**
+     * 删除文章
+     * @param deleteArticleReqVO
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Response deleteArticle(DeleteArticleReqVO deleteArticleReqVO) {
+        Long articleId = deleteArticleReqVO.getId();
+
+        articleMapper.deleteById(articleId);
+
+        articleContentMapper.deleteByArticleIdInt(articleId);
+
+        articleCategoryRelMapper.deleteByArticleIdInt(articleId);
+
+        articleTagRelMapper.deleteByArticleIdInt(articleId);
+
+        return Response.success();
+    }
+
+    @Override
+    public Response findArticlePageList(FindArticlePageListReqVO findArticlePageListReqVO) {
+        Long current = findArticlePageListReqVO.getCurrent();
+        Long size = findArticlePageListReqVO.getSize();
+        String title = findArticlePageListReqVO.getTitle();
+        LocalDate startDate = findArticlePageListReqVO.getStartDate();
+        LocalDate endDate = findArticlePageListReqVO.getEndDate();
+
+        Page<ArticleDO> articleDOPage = articleMapper.selectPageList(current, size, title, startDate, endDate);
+
+        List<ArticleDO> articleDOS = articleDOPage.getRecords();
+
+        List<FindArticlePageListRspVO> vos = null;
+        if(!CollectionUtils.isEmpty(articleDOS)){
+            vos = articleDOS.stream()
+                    .map(articleDO -> FindArticlePageListRspVO.builder()
+                            .id(articleDO.getId())
+                            .cover(articleDO.getCover())
+                            .createTime(articleDO.getCreateTime())
+                            .title(articleDO.getTitle())
+                            .build())
+                    .collect(Collectors.toList());
+        }
+
+        return PageResponse.success(articleDOPage,vos);
     }
 
     /**
