@@ -12,7 +12,8 @@
                 <div class="ml-3 w-30 mr-5">
                     <!-- 日期选择组件（区间选择） -->
                     <el-date-picker v-model="pickDate" type="daterange" range-separator="至" start-placeholder="开始时间"
-                        end-placeholder="结束时间" :shortcuts="shortcuts" size="default" @change="datepickerChange"></el-date-picker>
+                        end-placeholder="结束时间" :shortcuts="shortcuts" size="default"
+                        @change="datepickerChange"></el-date-picker>
                 </div>
 
                 <el-button type="primary" class="ml-3" :icon="Search" @click="getTableDate">查询</el-button>
@@ -23,9 +24,9 @@
         <el-card shadow="never">
             <!-- 写文章按钮 -->
             <div class="mb-5">
-                <el-button type="primary" @click="addCategoryBtnClick">
+                <el-button type="primary" @click="isArticlePublishEditorShow = true">
                     <el-icon class="mr-1">
-                        <Plus />
+                        <EditPen />
                     </el-icon>写文章
                 </el-button>
             </div>
@@ -47,7 +48,7 @@
                             </el-icon>
                             编辑
                         </el-button>
-                        <el-button type="danger" size="small">
+                        <el-button type="danger" size="small" @click="deleteArticleSubmit(scope.row)">
                             <el-icon class="mr-1">
                                 <Delete />
                             </el-icon>
@@ -57,6 +58,63 @@
                 </el-table-column>
             </el-table>
         </el-card>
+
+        <el-dialog v-model="isArticlePublishEditorShow" :show-close="false" :fullscreen="true">
+            <template #header="{ close, titleId, titleClass }">
+                <!-- 固钉组件，固钉到顶部 -->
+                <el-affix :offset="20" style="width: 100%;">
+                    <!-- 指定 flex 布局， 高度为 10， 背景色为白色 -->
+                    <div class="flex h-10 bg-white">
+                        <!-- 字体加粗 -->
+                        <h4 class="font-bold">写文章</h4>
+                        <!-- 靠右对齐 -->
+                        <div class="ml-auto flex">
+                            <el-button @click="isArticlePublishEditorShow = false">取消</el-button>
+                            <el-button type="primary">
+                                <el-icon class="mr-1">
+                                    <Promotion />
+                                </el-icon>
+                                发布
+                            </el-button>
+                        </div>
+                    </div>
+                </el-affix>
+            </template>
+            <!-- label-position="top" 用于指定 label 元素在上面 -->
+            <el-form :model="form" ref="publishArticleFormRef" label-position="top" size="large" :rules="rules">
+                <el-form-item label="标题" prop="title">
+                    <el-input v-model="form.title" autocomplete="off" size="large" maxlength="40" clearable />
+                </el-form-item>
+                <el-form-item label="内容" prop="content">
+                    <!-- Markdown 编辑器 -->
+                    <MdEditor v-model="form.content" @onUploadImg="onUploadImg" editorId="publishArticleEditor"></MdEditor>
+                </el-form-item>
+                <el-form-item label="封面" prop="cover">
+                    <el-upload class="avatar-uploader" action="#" :on-change="handleCoverChange" :auto-upload="false"
+                        :show-file-list="false">
+                        <img v-if="form.cover" :src="form.cover" class="avatar">
+                        <el-icon v-else class="avatar-uploader-icon">
+                            <Plus />
+                        </el-icon>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="摘要" prop="summary">
+                    <!-- :rows="3" 指定 textarea 默认显示 3 行 -->
+                    <el-input v-model="form.summary" :rows="3" type="textarea" placeholder="请输入文章摘要" />
+                </el-form-item>
+                <el-form-item label="分类" prop="categoryId">
+                    <el-select v-model="form.categoryId" clearable placeholder="---请选择---">
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="标签" prop="tags">
+                    <!-- 标签选择 -->
+                    <el-select v-model="form.tags" multiple filterable remote reserve-keyword placeholder="---请输入---"
+                        remote-show-suffix :remote-method="remoteMethod" allow-create default-first-option
+                        :loading="tagSelectLoading" size="large">
+                    </el-select>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
     </div>
     <!-- 分页 -->
     <div class="mt-10 flex justify-center">
@@ -69,9 +127,13 @@
 <script setup>
 // 引入所需图标
 import { reactive, ref } from 'vue'
-import { Search,RefreshRight } from '@element-plus/icons-vue'
+import { Search, RefreshRight, Promotion } from '@element-plus/icons-vue'
 import moment from 'moment'
-import { getArticlePageList } from '@/api/admin/article'
+import { getArticlePageList, deleteArticle } from '@/api/admin/article'
+import { showMessage, showModel } from '@/composables/util'
+import { MdEditor } from 'md-editor-v3'
+import { uploadFile } from '@/api/admin/file'
+import 'md-editor-v3/lib/style.css'
 
 // 模糊搜索的文章标题
 const searchArticleTitle = ref('')
@@ -88,6 +150,32 @@ const size = ref(10)
 // 查询条件 起止时间
 const startDate = reactive({})
 const endDate = reactive({})
+// 是否显示文章发布对话框
+const isArticlePublishEditorShow = ref(false)
+// 发布文章表单引用
+const publishArticleFormRef = ref(null)
+
+//表单对象
+const form = reactive({
+    id: null,
+    title: '',
+    content: '',
+    cover: '',
+    categoryId: null,
+    tags: [],
+    summary: ""
+})
+
+const rules = {
+    title: [
+        { required: true, message: '请输入文章标题', trigger: 'blur' },
+        { min: 1, max: 40, message: '文章标题要求大于一个字符，小于40个字符' },
+    ],
+    content: [{ required: true }],
+    cover: [{ required: true }],
+    categoryId: [{ required: true, message: '请选择文章分类', trigger: 'blur' }],
+    tags: [{ required: true, message: '请选择文章分标签', trigger: 'blur' }]
+}
 
 // 监听日期组件改变事件，并将开始结束时间设置到变量中
 const datepickerChange = (e) => {
@@ -129,28 +217,82 @@ const shortcuts = [
     },
 ]
 
-const reset = ()=>{
+const reset = () => {
     searchArticleTitle.value = '',
-    pickDate.value='',
-    startDate.value = null,
-    endDate.value = null
+        pickDate.value = '',
+        startDate.value = null,
+        endDate.value = null
 }
 
+const deleteArticleSubmit = (row) => {
+    console.log(row);
+    showModel('是否确认要删除该文章？').then(() => {
+        deleteArticle(row.id).then((res) => {
+            if (res.success == false) {
+                let message = res.message;
+                showMessage(message, 'error');
+                return
+            }
+            showMessage('删除成功')
+            getTableDate()
+        })
+    }).catch(() => {
+        console.log('取消了');
+    })
+}
+
+// 上传文章封面图片
+const handleCoverChange = (file) => {
+    // 表单对象
+    let formData = new FormData()
+    // 添加 file 字段，并将文件传入 
+    formData.append('file', file.raw)
+    uploadFile(formData).then((e) => {
+        // 响参失败，提示错误消息
+        if (e.success == false) {
+            let message = e.message
+            showMessage(message, 'error')
+            return
+        }
+
+        // 成功则设置表单对象中的封面链接，并提示上传成功
+        form.cover = e.data.url
+        showMessage('上传成功')
+    })
+}
+
+const onUploadImg = async(files,callback)=>{
+    const res = await Promise.all(
+        files.map((file)=>{
+            return new Promise((rev,rej)=>{
+                console.log('==>编辑器开始上传文件...');
+                let  formData = new FormData()
+                formData.append('file',file)
+                uploadFile(formData).then((res)=>{
+                    console.log(res);
+                    console.log('访问路径：'+res.data.url);
+                    // 调用 callback 函数，回显上传图片(编辑器提供的)
+                    callback([res.data.url])
+                })
+            })
+        })
+    )
+}
 
 // 获取分页数据
 function getTableDate() {
     // 显示表格loading
-    tableLoading.value =true
+    tableLoading.value = true
     // 调用后台分页接口，并传入所需参数
-    getArticlePageList({current:current.value,size:size.value,startDate:startDate.value,endDate:endDate.value,title:searchArticleTitle.value,})
-    .then((res)=>{
-        if(res.success == true){
-            tableData.value = res.data
-            current.value = res.current
-            size.value = res.size
-            total.value = res.total
-        }
-    }).finally(()=>{tableLoading.value=false})//隐藏表格loading
+    getArticlePageList({ current: current.value, size: size.value, startDate: startDate.value, endDate: endDate.value, title: searchArticleTitle.value, })
+        .then((res) => {
+            if (res.success == true) {
+                tableData.value = res.data
+                current.value = res.current
+                size.value = res.size
+                total.value = res.total
+            }
+        }).finally(() => { tableLoading.value = false })//隐藏表格loading
 }
 
 getTableDate()
@@ -161,3 +303,20 @@ const handleSizeChange = (chooseSize) => {
 }
 
 </script>
+
+<style scoped>
+/* 封面图片样式 */
+.avatar-uploader .avatar {
+    width: 200px;
+    height: 100px;
+    display: block;
+}
+
+.el-icon.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 200px;
+    height: 100px;
+    text-align: center;
+}
+</style>
