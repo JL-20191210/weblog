@@ -15,3 +15,13 @@ export function deleteTag(id){
     // 包装成了一个对象的形式：{id : id} ， {id} 是其简写模式
     return axios.post("/admin/tag/delete",{id})
 }
+
+// 根据标签名模糊查询
+export function searchTags(key){
+    return axios.post("/admin/tag/search",{key})
+}
+
+//获取标签select列表数据
+export function getTagSelectList(){
+    return axios.post("/admin/tag/select/list")
+}

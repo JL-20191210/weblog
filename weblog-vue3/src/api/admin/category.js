@@ -15,3 +15,7 @@ export function deleteCategory(id){
     // 包装成了一个对象的形式：{id : id} ， {id} 是其简写模式
     return axios.post("/admin/category/delete",{id})
 }
+
+export function getCategorySelectList(){
+    return axios.post("/admin/category/select/list")
+}
