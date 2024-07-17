@@ -33,7 +33,7 @@ jwt:
   issuer: shuige
   # 秘钥
   secret: 1pWQRLxRlbAjctkp+yMUO9nMqrXEOqYFYCP/v3GsvuQOAW2ZMMztvZ/qPExap6H4jw2EYjbXM5zcqZPfPAKTrg==
-  #token 过期时间
+  #token 过期时间 分钟
   tokenExpireTime: 1440
   #token请求头中的Key值
   tokenHeaderKey: Authorization

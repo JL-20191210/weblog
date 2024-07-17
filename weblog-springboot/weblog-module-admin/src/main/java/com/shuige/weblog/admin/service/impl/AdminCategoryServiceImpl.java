@@ -6,7 +6,9 @@ import com.shuige.weblog.admin.model.vo.category.DeleteCategoryReqVO;
 import com.shuige.weblog.admin.model.vo.category.FindCategoryPageListReqVO;
 import com.shuige.weblog.admin.model.vo.category.FindCategoryPageListRspVO;
 import com.shuige.weblog.admin.service.AdminCategoryService;
+import com.shuige.weblog.common.domain.dos.ArticleCategoryRelDO;
 import com.shuige.weblog.common.domain.dos.CategoryDO;
+import com.shuige.weblog.common.domain.mapper.ArticleCategoryRelMapper;
 import com.shuige.weblog.common.domain.mapper.CategoryMapper;
 import com.shuige.weblog.common.enums.ResponseCodeEnum;
 import com.shuige.weblog.common.exception.BizException;
@@ -29,6 +31,9 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private ArticleCategoryRelMapper articleCategoryRelMapper;
 
     /**
      * 添加分类
@@ -89,8 +94,15 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     @Override
     public Response deleteCategory(DeleteCategoryReqVO deleteCategoryReqVO) {
         // 执行删除
-        Long id = deleteCategoryReqVO.getId();
-        categoryMapper.deleteById(id);
+        Long categoryId = deleteCategoryReqVO.getId();
+
+        ArticleCategoryRelDO articleCategoryRelDO = articleCategoryRelMapper.selectOneByCategoryId(categoryId);
+
+        if(!Objects.nonNull(articleCategoryRelDO)){
+            log.warn("==> 此分类下包含文章，无法删除，categoryId: {}", categoryId);
+            throw new BizException(ResponseCodeEnum.CATEGORY_CAN_NOT_DELETE);
+        }
+        categoryMapper.deleteById(categoryId);
 
         return Response.success();
     }

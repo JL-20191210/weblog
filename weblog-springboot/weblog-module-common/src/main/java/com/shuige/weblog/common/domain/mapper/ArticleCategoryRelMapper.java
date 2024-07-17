@@ -27,4 +27,10 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
     default ArticleCategoryRelDO selectByArticleId(Long articleId){
         return selectOne(Wrappers.<ArticleCategoryRelDO>lambdaQuery().eq(ArticleCategoryRelDO::getArticleId,articleId));
     }
+
+    default ArticleCategoryRelDO selectOneByCategoryId(Long categoryId){
+        return  selectOne(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
+                .eq(ArticleCategoryRelDO::getCategoryId,categoryId)
+                .last("limit 1"));
+    }
 }

@@ -1,12 +1,16 @@
 package com.shuige.weblog.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shuige.weblog.admin.model.vo.tag.*;
 import com.shuige.weblog.admin.service.AdminTagService;
+import com.shuige.weblog.common.domain.dos.ArticleTagRelDO;
 import com.shuige.weblog.common.domain.dos.TagDO;
+import com.shuige.weblog.common.domain.mapper.ArticleTagRelMapper;
 import com.shuige.weblog.common.domain.mapper.TagMapper;
 import com.shuige.weblog.common.enums.ResponseCodeEnum;
+import com.shuige.weblog.common.exception.BizException;
 import com.shuige.weblog.common.model.vo.SelectRspVO;
 import com.shuige.weblog.common.utils.PageResponse;
 import com.shuige.weblog.common.utils.Response;
@@ -18,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +31,9 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
 
     @Autowired
     private TagMapper tagMapper;
+
+    @Autowired
+    private ArticleTagRelMapper articleTagRelMapper;
 
     @Override
     public Response addTags(AddTagReqVO addTagReqVO) {
@@ -75,9 +83,14 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
 
     @Override
     public Response deleteTag(DeleteTagReqVO deleteTagReqVO) {
-        Long id = deleteTagReqVO.getId();
+        Long tagId = deleteTagReqVO.getId();
+        ArticleTagRelDO articleTagRelDO = articleTagRelMapper.selectOneByTagId(tagId);
+        if(!Objects.nonNull(articleTagRelDO)){
+            log.warn("==> 此标签下包含文章，无法删除，tagId: {}", tagId);
+            throw new BizException(ResponseCodeEnum.TAG_CAN_NOT_DELETE);
+        }
 
-        int count = tagMapper.deleteById(id);
+        int count = tagMapper.deleteById(tagId);
         return count==1?Response.success():Response.fail(ResponseCodeEnum.TAG_NOT_EXIST);
     }
 
@@ -95,6 +108,23 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
                             .value(tagDO.getId())
                             .build())
                     .collect(Collectors.toList());
+        }
+        return Response.success(vos);
+    }
+
+    @Override
+    public Response findTagSelectList() {
+        //查询所有标签，Wrappers.emptyWrapper()表示查询条件为空
+        List<TagDO> tagDOS = tagMapper.selectList(Wrappers.emptyWrapper());
+
+        //DO转VO
+        List<SelectRspVO> vos = null;
+        if(!CollectionUtils.isEmpty(tagDOS)){
+            vos = tagDOS.stream()
+                    .map(tagDO -> SelectRspVO.builder()
+                            .label(tagDO.getName())
+                            .value(tagDO.getId())
+                            .build()).collect(Collectors.toList());
         }
         return Response.success(vos);
     }
