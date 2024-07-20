@@ -40,4 +40,14 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
         return selectList(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
                 .in(ArticleCategoryRelDO::getArticleId,articleIds));
     };
+
+    /**
+     * 根据分类id查询所有关联记录
+     * @param categoryId
+     * @return
+     */
+    default List<ArticleCategoryRelDO> selectListByCategoryId(Long categoryId){
+        return selectList(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
+                .eq(ArticleCategoryRelDO::getCategoryId,categoryId));
+    }
 }

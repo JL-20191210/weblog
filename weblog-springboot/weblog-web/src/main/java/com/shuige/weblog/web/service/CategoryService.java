@@ -1,6 +1,7 @@
 package com.shuige.weblog.web.service;
 
 import com.shuige.weblog.common.utils.Response;
+import com.shuige.weblog.web.model.vo.category.FindCategoryArticlePageListReqVO;
 
 /**
  * @author felix
@@ -13,4 +14,6 @@ public interface CategoryService {
      * @return
      */
     Response findCategoryList();
+
+    Response findCategoryArticlePageList(FindCategoryArticlePageListReqVO findCategoryArticlePageListReqVO);
 }

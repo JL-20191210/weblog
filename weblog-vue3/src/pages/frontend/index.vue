@@ -4,11 +4,11 @@
     <!-- 主内容区域 -->
     <main class="container max-w-screen-xl mx-auto p-4">
         <!-- grid 表格布局，分为 4 列，元素间隔为 gap-4  -->
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-4 gap-7">
             <!-- 左边栏，占用 3 列 -->
             <div class="col-span-4  md:col-span-3 mb-3">
                 <!-- 文章列表，grid布局，分为两列 -->
-                <div class="grid grid-cols-2 gap-7">
+                <div class="grid grid-cols-2 gap-4">
                     <div v-for="(article,index) in articles" :key="index" class="col-span-2 md:col-span-1 bg-blue-500">
                         <!-- 文章卡片 -->
                         <div
