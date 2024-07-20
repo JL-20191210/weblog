@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.shuige.weblog.common.domain.dos.ArticleCategoryRelDO;
 
+import java.util.List;
+
 /**
  * @author felix
  * @date 2024/7/9 10:54
@@ -33,4 +35,9 @@ public interface ArticleCategoryRelMapper extends BaseMapper<ArticleCategoryRelD
                 .eq(ArticleCategoryRelDO::getCategoryId,categoryId)
                 .last("limit 1"));
     }
+
+    default List<ArticleCategoryRelDO> selectByArticleIds(List<Long> articleIds){
+        return selectList(Wrappers.<ArticleCategoryRelDO>lambdaQuery()
+                .in(ArticleCategoryRelDO::getArticleId,articleIds));
+    };
 }

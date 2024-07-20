@@ -5,7 +5,7 @@ import com.shuige.weblog.common.domain.mapper.BlogSettingsMapper;
 import com.shuige.weblog.common.utils.Response;
 import com.shuige.weblog.web.convert.BlogSettingConvert;
 import com.shuige.weblog.web.model.vo.blogsetting.FindBlogSettingsDetailRspVO;
-import com.shuige.weblog.web.service.BlogSettingService;
+import com.shuige.weblog.web.service.BlogSettingsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class BlogSettingServiceImpl implements BlogSettingService {
+public class BlogSettingsServiceImpl implements BlogSettingsService {
 
     @Autowired
     private BlogSettingsMapper blogSettingsMapper;
