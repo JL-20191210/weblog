@@ -1,6 +1,7 @@
 package com.shuige.weblog.web.service;
 
 import com.shuige.weblog.common.utils.Response;
+import com.shuige.weblog.web.model.vo.article.FindArticleDetailReqVO;
 import com.shuige.weblog.web.model.vo.article.FindIndexArticlePageListReqVO;
 
 /**
@@ -14,4 +15,11 @@ public interface ArticleService {
      * @return
      */
     Response findArticlePageList(FindIndexArticlePageListReqVO findIndexArticlePageListReqVO);
+
+    /**
+     * 获取文章详情
+     * @param articleId
+     * @return
+     */
+    Response findArticleDetail(FindArticleDetailReqVO findArticleDetailReqVO);
 }

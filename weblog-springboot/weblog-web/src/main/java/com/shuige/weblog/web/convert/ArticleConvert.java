@@ -4,6 +4,7 @@ import com.shuige.weblog.common.domain.dos.ArticleDO;
 import com.shuige.weblog.web.model.vo.archive.FindArchiveArticleRspVO;
 import com.shuige.weblog.web.model.vo.article.FindIndexArticlePageListRspVO;
 import com.shuige.weblog.web.model.vo.category.FindCategoryArticlePageListRspVO;
+import com.shuige.weblog.web.model.vo.tag.FindTagArticlePageListRspVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -37,4 +38,7 @@ public interface ArticleConvert {
 
     @Mapping(target = "createDate", expression = "java(java.time.LocalDate.from(bean.getCreateTime()))")
     FindCategoryArticlePageListRspVO convertDO2CategoryArticleVO(ArticleDO bean);
+
+    @Mapping(target = "createDate", expression = "java(java.time.LocalDate.from(bean.getCreateTime()))")
+    FindTagArticlePageListRspVO convertDO2TagArticleVO(ArticleDO bean);
 }

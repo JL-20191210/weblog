@@ -2,6 +2,7 @@ package com.shuige.weblog.common.domain.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shuige.weblog.common.domain.dos.TagDO;
 
@@ -40,5 +41,10 @@ public interface TagMapper extends BaseMapper<TagDO> {
         // 构造模糊查询条件
         wrapper.like(TagDO::getName,key).orderByDesc(TagDO::getCreateTime);
         return selectList(wrapper);
+    }
+
+    default List<TagDO> selectByIds(List<Long> tagIds){
+        return selectList(Wrappers.<TagDO>lambdaQuery()
+                .in(TagDO::getId,tagIds));
     }
 }

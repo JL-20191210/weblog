@@ -7,10 +7,12 @@ import AdminCategoryList from '@/pages/admin/category-list.vue'
 import AdminTagList from '@/pages/admin/tag-list.vue'
 import AdminBlogSetting from '@/pages/admin/blog-setting.vue'
 import ArchiveList from '@/pages/frontend/archive-list.vue'
+import TagArticleList from '@/pages/frontend/tag-article-list.vue'
 
 import {createRouter,createWebHashHistory} from 'vue-router'
 import CategoryList from "@/pages/frontend/category-list.vue";
 import CategoryArticleList from "@/pages/frontend/category-article-list.vue";
+import TagList from "@/pages/frontend/tag-list.vue";
 
 //统一在这里声明所有路由
 const routes = [
@@ -47,6 +49,20 @@ const routes = [
         component: CategoryArticleList,
         meta: {// meta信息
             title: 'Weblog分类文章页'
+        }
+    },
+    {
+        path: '/tag/list',//标签列表页
+        component: TagList,
+        meta: {// meta信息
+            title: 'Weblog标签列表页'
+        }
+    },
+    {
+        path: '/tag/article/list', // 标签列表页
+        component: TagArticleList,
+        meta: { // meta 信息
+            title: 'Weblog 标签文章页'
         }
     },
     {

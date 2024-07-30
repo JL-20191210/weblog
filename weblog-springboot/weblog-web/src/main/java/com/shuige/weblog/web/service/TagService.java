@@ -1,6 +1,7 @@
 package com.shuige.weblog.web.service;
 
 import com.shuige.weblog.common.utils.Response;
+import com.shuige.weblog.web.model.vo.tag.FindTagArticlePageListReqVO;
 
 /**
  * @author felix
@@ -12,4 +13,11 @@ public interface TagService {
      * @return
      */
     Response findTagList();
+
+    /**
+     * 查询标签下文章分页数据
+     * @param findTagArticlePageListReqVO
+     * @return
+     */
+    Response findTagPageList(FindTagArticlePageListReqVO findTagArticlePageListReqVO);
 }

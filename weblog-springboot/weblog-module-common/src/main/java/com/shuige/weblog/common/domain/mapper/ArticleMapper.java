@@ -58,4 +58,29 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
 
         return selectPage(page, wrapper);
     }
+
+    /**
+     * 查询上一篇文章
+     * @param articleId
+     * @return
+     */
+    default ArticleDO selectPreArticle(Long articleId){
+        return selectOne(Wrappers.<ArticleDO>lambdaQuery()
+                .orderByAsc(ArticleDO::getId)
+                .gt(ArticleDO::getId,articleId)
+                .last("limit 1"));
+    }
+
+    /**
+     * 查询下一篇文章
+     * @param articleId
+     * @return
+     */
+    default ArticleDO selectNextArticle(Long articleId){
+        return selectOne(Wrappers.<ArticleDO>lambdaQuery()
+                .orderByDesc(ArticleDO::getId)
+                .lt(ArticleDO::getId,articleId)
+                .last("limit 1"));
+    }
+
 }

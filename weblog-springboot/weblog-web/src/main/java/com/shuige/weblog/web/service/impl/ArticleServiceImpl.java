@@ -5,14 +5,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.shuige.weblog.common.domain.dos.*;
 import com.shuige.weblog.common.domain.mapper.*;
+import com.shuige.weblog.common.enums.ResponseCodeEnum;
+import com.shuige.weblog.common.exception.BizException;
 import com.shuige.weblog.common.utils.PageResponse;
 import com.shuige.weblog.common.utils.Response;
 import com.shuige.weblog.web.convert.ArticleConvert;
+import com.shuige.weblog.web.model.vo.article.FindArticleDetailReqVO;
+import com.shuige.weblog.web.model.vo.article.FindArticleDetailRspVO;
 import com.shuige.weblog.web.model.vo.article.FindIndexArticlePageListReqVO;
 import com.shuige.weblog.web.model.vo.article.FindIndexArticlePageListRspVO;
 import com.shuige.weblog.web.model.vo.category.FindCategoryListRspVO;
 import com.shuige.weblog.web.model.vo.tag.FindTagListRspVO;
 import com.shuige.weblog.web.service.ArticleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -28,6 +33,8 @@ import java.util.stream.Collectors;
  * @date 2024/7/17 22:15
  */
 @Service
+@Slf4j
+@SuppressWarnings("all")
 public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
@@ -40,6 +47,8 @@ public class ArticleServiceImpl implements ArticleService {
     private TagMapper tagMapper;
     @Autowired
     private ArticleTagRelMapper articleTagRelMapper;
+    @Autowired
+    private ArticleContentMapper articleContentMapper;
     @Override
     public Response findArticlePageList(FindIndexArticlePageListReqVO findIndexArticlePageListReqVO) {
         Long current = findIndexArticlePageListReqVO.getCurrent();
@@ -116,5 +125,30 @@ public class ArticleServiceImpl implements ArticleService {
 
         }
         return PageResponse.success(articleDOPage,vos);
+    }
+
+    @Override
+    public Response findArticleDetail(FindArticleDetailReqVO findArticleDetailReqVO) {
+        Long articleId = findArticleDetailReqVO.getArticleId();
+        ArticleDO articleDO = articleMapper.selectById(articleId);
+
+        if(Objects.isNull(articleDO)){
+            log.warn("==> 该文章不存在, articleId: {}", articleId);
+            throw new BizException(ResponseCodeEnum.ARTICLE_NOT_FOUND);
+        }
+
+        ArticleContentDO articleContentDO = articleContentMapper.selectByArticleId(articleId);
+        List<ArticleCategoryRelDO> articleCategoryRelDOS = articleCategoryRelMapper.selectListByCategoryId(articleId);
+
+        //DO转VO
+        FindArticleDetailRspVO findArticleDetailRspVO = FindArticleDetailRspVO.builder()
+                .title(articleDO.getTitle())
+                .createTime(articleDO.getCreateTime())
+                .content(articleContentDO.getContent())
+                .readNum(articleDO.getReadNum())
+                .build();
+
+
+        return null;
     }
 }
