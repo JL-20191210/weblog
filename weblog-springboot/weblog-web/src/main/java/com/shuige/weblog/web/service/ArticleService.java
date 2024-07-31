@@ -18,7 +18,7 @@ public interface ArticleService {
 
     /**
      * 获取文章详情
-     * @param articleId
+     * @param findArticleDetailReqVO
      * @return
      */
     Response findArticleDetail(FindArticleDetailReqVO findArticleDetailReqVO);

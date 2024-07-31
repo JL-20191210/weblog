@@ -138,7 +138,8 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         ArticleContentDO articleContentDO = articleContentMapper.selectByArticleId(articleId);
-        List<ArticleCategoryRelDO> articleCategoryRelDOS = articleCategoryRelMapper.selectListByCategoryId(articleId);
+        ArticleCategoryRelDO articleCategoryRelDOS = articleCategoryRelMapper.selectByArticleId(articleId);
+        CategoryDO categoryDO = categoryMapper.selectById(articleCategoryRelDOS.getCategoryId());
 
         //DO转VO
         FindArticleDetailRspVO findArticleDetailRspVO = FindArticleDetailRspVO.builder()
@@ -146,7 +147,19 @@ public class ArticleServiceImpl implements ArticleService {
                 .createTime(articleDO.getCreateTime())
                 .content(articleContentDO.getContent())
                 .readNum(articleDO.getReadNum())
+                .categoryId(categoryDO.getId())
+                .categoryName(categoryDO.getName())
                 .build();
+
+        List<ArticleTagRelDO> articleTagRelDOS = articleTagRelMapper.selectByArticleId(articleId);
+        List<Long> tagIds = articleTagRelDOS.stream().map(ArticleTagRelDO::getTagId).collect(Collectors.toList());
+        List<TagDO> tagDOS = tagMapper.selectByIds(tagIds);
+
+        List<FindTagListRspVO> tagVOS = tagDOS.stream()
+                .map(tagDO -> FindTagListRspVO.builder().id(tagDO.getId()).name(tagDO.getName()).build())
+                .collect(Collectors.toList());
+
+        findArticleDetailRspVO.setTags(tagVOS);
 
 
         return null;
