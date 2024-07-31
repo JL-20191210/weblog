@@ -8,6 +8,7 @@ import AdminTagList from '@/pages/admin/tag-list.vue'
 import AdminBlogSetting from '@/pages/admin/blog-setting.vue'
 import ArchiveList from '@/pages/frontend/archive-list.vue'
 import TagArticleList from '@/pages/frontend/tag-article-list.vue'
+import ArticleDetail from '@/pages/frontend/article-detail.vue'
 
 import {createRouter,createWebHashHistory} from 'vue-router'
 import CategoryList from "@/pages/frontend/category-list.vue";
@@ -66,6 +67,13 @@ const routes = [
         }
     },
     {
+        path: '/article/:articleId', // 文章详情页
+        component: ArticleDetail,
+        meta: { // meta 信息
+            title: 'Weblog 详情页'
+        }
+    },
+    {
         path:"/admin",//后台首页
         component:Admin,//对应admin.vue的布局文件
         // 使用到admin.vue布局的，都要放置在其子路由下面
@@ -84,6 +92,7 @@ const routes = [
                     title:"文章管理"
                 }
             },
+
             {
                 path:"/admin/category/list",
                 component:AdminCategoryList,

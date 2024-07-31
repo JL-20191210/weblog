@@ -10,10 +10,7 @@ import com.shuige.weblog.common.exception.BizException;
 import com.shuige.weblog.common.utils.PageResponse;
 import com.shuige.weblog.common.utils.Response;
 import com.shuige.weblog.web.convert.ArticleConvert;
-import com.shuige.weblog.web.model.vo.article.FindArticleDetailReqVO;
-import com.shuige.weblog.web.model.vo.article.FindArticleDetailRspVO;
-import com.shuige.weblog.web.model.vo.article.FindIndexArticlePageListReqVO;
-import com.shuige.weblog.web.model.vo.article.FindIndexArticlePageListRspVO;
+import com.shuige.weblog.web.model.vo.article.*;
 import com.shuige.weblog.web.model.vo.category.FindCategoryListRspVO;
 import com.shuige.weblog.web.model.vo.tag.FindTagListRspVO;
 import com.shuige.weblog.web.service.ArticleService;
@@ -161,7 +158,23 @@ public class ArticleServiceImpl implements ArticleService {
 
         findArticleDetailRspVO.setTags(tagVOS);
 
+        ArticleDO preArticleDO = articleMapper.selectPreArticle(articleId);
+        if(Objects.nonNull(preArticleDO)){
+            FindPreNextArticleRspVO findPreNextArticleRspVO = FindPreNextArticleRspVO.builder()
+                    .articleId(preArticleDO.getId())
+                    .articleTitle(preArticleDO.getTitle())
+                    .build();
+            findArticleDetailRspVO.setPreArticle(findPreNextArticleRspVO);
+        }
 
-        return null;
+        ArticleDO nextArticleDO = articleMapper.selectNextArticle(articleId);
+        if(Objects.nonNull(nextArticleDO)){
+            FindPreNextArticleRspVO nextArticleRspVO = FindPreNextArticleRspVO.builder()
+                    .articleId(nextArticleDO.getId())
+                    .articleTitle(nextArticleDO.getTitle())
+                    .build();
+        }
+
+        return Response.success(findArticleDetailRspVO);
     }
 }
