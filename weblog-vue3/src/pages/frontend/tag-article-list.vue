@@ -29,7 +29,7 @@
                     <ol v-if="articles && articles.length > 0"
                         class="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
                         <li v-for="(article, index) in articles" :key="index">
-                            <a class="items-center block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <a @click="goArticleDetailPage(article.id)" class="items-center cursor-pointer block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <img class="w-24 h-12 mb-3 mr-3 rounded-lg sm:mb-0" :src="article.cover" />
                                 <div class="text-gray-600 dark:text-gray-400">
                                     <h2 class="text-base font-normal text-gray-900">
@@ -270,14 +270,16 @@
 
             <!-- 右边侧边栏，占用一列 -->
             <aside class="col-span-4 md:col-span-1">
-                <!-- 博主信息 -->
-                <UserInfoCard></UserInfoCard>
+                <div class="sticky top-[5.5rem]">
+                    <!-- 博主信息 -->
+                    <UserInfoCard></UserInfoCard>
 
-                <!-- 分类 -->
-                <CategoryListCard></CategoryListCard>
+                    <!-- 分类 -->
+                    <CategoryListCard></CategoryListCard>
 
-                <!-- 标签 -->
-                <TagListCard></TagListCard>
+                    <!-- 标签 -->
+                    <TagListCard></TagListCard>
+                </div>
             </aside>
         </div>
 
@@ -293,7 +295,7 @@ import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute,useRouter } from 'vue-router'
 import { getTagArticlePageList } from '@/api/frontend/tag'
 
 const route = useRoute()
@@ -309,7 +311,7 @@ const articles = ref([])
 watch(route, (newRoute, oldRoute) => {
     tagName.value = newRoute.query.name
     tagID.value = newRoute.query.id
-    console.log('路由变化'+tagName.value+tagID.value);
+    console.log('路由变化' + tagName.value + tagID.value);
     getTagArticles(current.value)
 })
 
@@ -327,7 +329,7 @@ function getTagArticles(currentNo) {
     if (currentNo < 1 || (pages.value > 0 && currentNo > pages.value)) return
     // 调用分页接口渲染数据
     getTagArticlePageList({ current: currentNo, size: size.value, id: tagID.value }).then((res) => {
-        console.log('参数为'+tagID.value);
+        console.log('参数为' + tagID.value);
         if (res.success) {
             articles.value = res.data
             current.value = res.current
@@ -340,4 +342,8 @@ function getTagArticles(currentNo) {
 }
 
 getTagArticles(current.value)
+const router = useRouter()
+const goArticleDetailPage = (articleId) => {
+    router.push('/article/' + articleId)
+}
 </script>

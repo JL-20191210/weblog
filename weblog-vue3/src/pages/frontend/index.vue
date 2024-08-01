@@ -9,27 +9,26 @@
             <div class="col-span-4  md:col-span-3 mb-3">
                 <!-- 文章列表，grid布局，分为两列 -->
                 <div class="grid grid-cols-2 gap-4">
-                    <div v-for="(article,index) in articles" :key="index" class="col-span-2 md:col-span-1">
+                    <div v-for="(article, index) in articles" :key="index" class="col-span-2 md:col-span-1">
                         <!-- 文章卡片 -->
                         <div
                             class="max-w-sm bg-white border h-full border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                             <a @click="goArticleDetailPage(article.id)" class="cursor-pointer">
-                                <img class="rounded-t-lg h-48 w-full"
-                                    :src="article.cover"/>
+                                <img class="rounded-t-lg h-48 w-full" :src="article.cover" />
                             </a>
                             <div class="p-5">
                                 <!-- 标签 -->
                                 <div class="mb-3">
-                                    <span
-                                        v-for="(tag,tagIndex) in article.tags" :key="tagIndex" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                    <span v-for="(tag, tagIndex) in article.tags" :key="tagIndex"
+                                        class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                                         {{ tag.name }}
                                     </span>
                                 </div>
                                 <a @click="goArticleDetailPage(article.id)" class="cursor-pointer">
                                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        {{ article.title}}</h5>
+                                        {{ article.title }}</h5>
                                 </a>
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{article.summary}}
+                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ article.summary }}
                                 </p>
                                 <p class="flex items-center font-normal text-gray-400 text-sm dark:text-gray-400">
                                     <!-- 发布时间 -->
@@ -59,8 +58,8 @@
                         <!-- 上一页 -->
                         <li>
                             <a @click="getArticles(current - 1)"
-                                class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" 
-                                :class="[current>1?'':'cursor-not-allowed']">
+                                class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                :class="[current > 1 ? '' : 'cursor-not-allowed']">
                                 <span class="sr-only">上一页</span>
                                 <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
@@ -69,17 +68,17 @@
                                 </svg>
                             </a>
                         </li>
-                        <li v-for="(pageNo,index) in pages" :key="index">
+                        <li v-for="(pageNo, index) in pages" :key="index">
                             <a @click="getArticles(pageNo)"
-                                class="flex items-center justify-center px-4 h-10 leading-tight border  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" 
-                                :class="[pageNo == current ? 'text-blue-600 bg-blue-50 border-blue-300 hover:bg-blue-100 hover:text-blue-700':'text-gray-500 border-gray-300 bg-white hover:bg-gray-100 hover:text-gray-700']">
-                                {{ index +1 }}</a>
+                                class="flex items-center justify-center px-4 h-10 leading-tight border  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                :class="[pageNo == current ? 'text-blue-600 bg-blue-50 border-blue-300 hover:bg-blue-100 hover:text-blue-700' : 'text-gray-500 border-gray-300 bg-white hover:bg-gray-100 hover:text-gray-700']">
+                                {{ index + 1 }}</a>
                         </li>
                         <!-- 下一页 -->
                         <li>
                             <a @click="getArticles(current + 1)"
-                                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" 
-                                :class="[current<pages?'':'cursor-not-allowed']">
+                                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                :class="[current < pages ? '' : 'cursor-not-allowed']">
                                 <span class="sr-only">下一页</span>
                                 <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
@@ -93,11 +92,13 @@
             </div>
             <!-- 右边侧边栏，占用一列 -->
             <aside class="col-span-4  md:col-span-1">
-                <UserInfoCard></UserInfoCard>
-                <!-- 分类 -->
-                <CategoryListCard></CategoryListCard>
-                <!-- 标签 -->
-                <TagListCard></TagListCard>
+                <div class="sticky top-[5.5rem]">
+                    <UserInfoCard></UserInfoCard>
+                    <!-- 分类 -->
+                    <CategoryListCard></CategoryListCard>
+                    <!-- 标签 -->
+                    <TagListCard></TagListCard>
+                </div>
             </aside>
         </div>
     </main>
@@ -127,12 +128,12 @@ const total = ref(0)
 const pages = ref(0)
 
 // 获取指定页的文章数据
-function getArticles(currentNo){
+function getArticles(currentNo) {
     // 上下页是否能点击判断，当要跳转上一页且页码小于 1 时，则不允许跳转；当要跳转下一页且页码大于总页数时，则不允许跳转
-    if(currentNo<1 || (pages.value>0 && currentNo>pages.value)) return
+    if (currentNo < 1 || (pages.value > 0 && currentNo > pages.value)) return
     // 调用分页接口渲染数据
-    getArticlePageList({current: currentNo,size: size.value}).then((res)=>{
-        if(res.success){
+    getArticlePageList({ current: currentNo, size: size.value }).then((res) => {
+        if (res.success) {
             articles.value = res.data
             current.value = res.current
             size.value = res.size
@@ -145,7 +146,7 @@ function getArticles(currentNo){
 getArticles(current.value)
 
 const router = useRouter()
-const goArticleDetailPage = (articleId)=>{
-    router.push('/article/'+articleId)
+const goArticleDetailPage = (articleId) => {
+    router.push('/article/' + articleId)
 }
 </script>

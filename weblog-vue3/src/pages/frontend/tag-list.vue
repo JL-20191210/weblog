@@ -22,11 +22,13 @@
 
             <!-- 右边侧边栏，占用一列 -->
             <aside class="col-span-4 md:col-span-1">
-                <!-- 博主信息 -->
-                <UserInfoCard></UserInfoCard>
+                <div class="sticky top-[5.5rem]">
+                    <!-- 博主信息 -->
+                    <UserInfoCard></UserInfoCard>
 
-                <!-- 分类 -->
-                <CategoryListCard></CategoryListCard>
+                    <!-- 分类 -->
+                    <CategoryListCard></CategoryListCard>
+                </div>
             </aside>
         </div>
 
@@ -47,8 +49,8 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 
 const tags = ref([])
-getTagList().then((res)=>{
-    if(res.success){
+getTagList().then((res) => {
+    if (res.success) {
         tags.value = res.data
     }
 })
@@ -56,6 +58,6 @@ getTagList().then((res)=>{
 // 跳转标签文章列表页
 const goTagArticleListPage = (id, name) => {
     // 跳转时通过 query 携带参数（标签 ID、标签名称）
-    router.push({path: '/tag/article/list', query: {id, name}})
+    router.push({ path: '/tag/article/list', query: { id, name } })
 }
 </script>

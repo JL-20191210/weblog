@@ -13,10 +13,6 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * @author felix
- * @date 2024/7/30 17:04
- */
 public class ImageNodeRenderer implements NodeRenderer {
 
     private final HtmlWriter html;
@@ -68,15 +64,15 @@ public class ImageNodeRenderer implements NodeRenderer {
             if (Objects.nonNull(imageAttributes) && !CollectionUtils.isEmpty(imageAttributes.getAttributes())) {
                 String width = imageAttributes.getAttributes().get(KEY_WIDTH);
                 String height = imageAttributes.getAttributes().get(KEY_HEIGHT);
-                sb.append(StringUtils.isBlank(width) ? "" : (" " + KEY_WIDTH + "=\"" + width + "\""));
-                sb.append(StringUtils.isBlank(height) ? "" : (" " + KEY_HEIGHT + "=\"" + height + "\""));
+                sb.append(StringUtils.isBlank(width) ? "" : (" " + KEY_WIDTH + "=" + width + "\""));
+                sb.append(StringUtils.isBlank(height) ? "" : (" " + KEY_HEIGHT + "=" + height + "\""));
             }
         }
         sb.append(">");
 
         if (StringUtils.isNotBlank(imgTitle)) {
             // 图文下方文字
-            sb.append(String.format("<span>%s</span>", imgTitle));
+            sb.append(String.format("<span class=\"image-caption\">%s</span>", imgTitle));
         }
 
         // 设置 HTML 内容

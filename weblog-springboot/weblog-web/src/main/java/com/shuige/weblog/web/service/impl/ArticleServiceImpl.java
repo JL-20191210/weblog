@@ -10,6 +10,7 @@ import com.shuige.weblog.common.exception.BizException;
 import com.shuige.weblog.common.utils.PageResponse;
 import com.shuige.weblog.common.utils.Response;
 import com.shuige.weblog.web.convert.ArticleConvert;
+import com.shuige.weblog.web.markdown.MarkdownHelper;
 import com.shuige.weblog.web.model.vo.article.*;
 import com.shuige.weblog.web.model.vo.category.FindCategoryListRspVO;
 import com.shuige.weblog.web.model.vo.tag.FindTagListRspVO;
@@ -142,7 +143,7 @@ public class ArticleServiceImpl implements ArticleService {
         FindArticleDetailRspVO findArticleDetailRspVO = FindArticleDetailRspVO.builder()
                 .title(articleDO.getTitle())
                 .createTime(articleDO.getCreateTime())
-                .content(articleContentDO.getContent())
+                .content(MarkdownHelper.convertMarkdown2Html(articleContentDO.getContent()))
                 .readNum(articleDO.getReadNum())
                 .categoryId(categoryDO.getId())
                 .categoryName(categoryDO.getName())
@@ -173,6 +174,7 @@ public class ArticleServiceImpl implements ArticleService {
                     .articleId(nextArticleDO.getId())
                     .articleTitle(nextArticleDO.getTitle())
                     .build();
+            findArticleDetailRspVO.setNextArticle(nextArticleRspVO);
         }
 
         return Response.success(findArticleDetailRspVO);

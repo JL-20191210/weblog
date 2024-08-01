@@ -13,7 +13,7 @@
                     <time class="text-lg font-semibold text-gray-900 dark:text-white">{{ archive.month }}</time>
                     <ol class="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
                         <li v-for="(article, index2) in archive.articles" :key="index2">
-                            <a href="#" class="items-center block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <a @click="goArticleDetailPage(article.id)" class="items-center cursor-pointer block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <img class="w-12 h-12 mb-3 me-3 rounded-full sm:mb-0" :src="article.cover" />
                                 <div class="text-gray-600 dark:text-gray-400">
                                     <h2 class="text-base font-normal text-gray-900">
@@ -41,7 +41,7 @@
                         <!-- 上一页 -->
                         <li>
                             <a @click="getArchives(current - 1)"
-                            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                                 :class="[current > 1 ? '' : 'cursor-not-allowed']">
                                 <span class="sr-only">上一页</span>
                                 <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true"
@@ -60,7 +60,7 @@
                         <!-- 下一页 -->
                         <li>
                             <a @click="getArchives(current + 1)"
-                             class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                                 :class="[current < pages ? '' : 'cursor-not-allowed']">
                                 <span class="sr-only">下一页</span>
                                 <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true"
@@ -75,11 +75,13 @@
             </div>
             <!-- 右边侧边栏，占用一列 -->
             <aside class="col-span-4  md:col-span-1">
-                <UserInfoCard></UserInfoCard>
-                <!-- 分类 -->
-                <CategoryListCard></CategoryListCard>
-                <!-- 标签 -->
-                <TagListCard></TagListCard>
+                <div class="sticky top-[5.5rem]">
+                    <UserInfoCard></UserInfoCard>
+                    <!-- 分类 -->
+                    <CategoryListCard></CategoryListCard>
+                    <!-- 标签 -->
+                    <TagListCard></TagListCard>
+                </div>
             </aside>
         </div>
     </main>
@@ -94,6 +96,7 @@ import TagListCard from '@/layouts/frontend/components/TagListCard.vue';
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue';
 import { getArchivePageList } from '@/api/frontend/archive.js'
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 // 文章归档
 const archives = ref([])
@@ -105,6 +108,8 @@ const size = ref(10)
 const total = ref(0)
 // 总共多少页
 const pages = ref(0)
+
+const router = useRouter()
 
 function getArchives(currentNo) {
     // 上下页是否能点击判断，当要跳转上一页且页码小于 1 时，则不允许跳转；当要跳转下一页且页码大于总页数时，则不允许跳转
@@ -123,5 +128,9 @@ function getArchives(currentNo) {
 }
 
 getArchives(current.value)
+
+const goArticleDetailPage = (articleId) => {
+    router.push('/article/' + articleId)
+}
 
 </script>
