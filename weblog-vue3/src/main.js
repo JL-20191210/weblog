@@ -11,9 +11,13 @@ import '@/permission'
 // 导入 Element Plus 图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import pinia from '@/stores'
+// 图片点击放大
+import 'viewerjs/dist/viewer.css'
+import VueViewer from 'v-viewer'
 const app = createApp(App)
 // 应用Pinia
 app.use(router)
+app.use(VueViewer)
 app.mount('#app')
 app.use(pinia)
 
