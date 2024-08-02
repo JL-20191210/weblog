@@ -122,7 +122,7 @@
 
             <!-- 右边侧边栏，占用一列 -->
             <aside class="col-span-4 md:col-span-1">
-                <div class="sticky top-[5.5rem]">
+                <div>
                     <!-- 博主信息 -->
                     <UserInfoCard></UserInfoCard>
 
@@ -132,11 +132,13 @@
                     <!-- 标签 -->
                     <TagListCard></TagListCard>
                 </div>
+                <Toc></Toc>
             </aside>
         </div>
 
     </main>
-
+    <!-- 返回顶部 -->
+    <ScrollToTopButton></ScrollToTopButton>
     <Footer></Footer>
 </template>
 
@@ -146,9 +148,11 @@ import Footer from '@/layouts/frontend/components/Footer.vue'
 import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
+import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
+import Toc from '@/layouts/frontend/components/Toc.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getArticleDetail } from '@/api/frontend/article'
-import { ref, watch,onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import hljs from 'highlight.js'
 // 代码高亮样式
 import 'highlight.js/styles/tokyo-night-dark.css'
@@ -169,9 +173,12 @@ const article = ref({})
 
 function refreshArticleDetail(articleId) {
     getArticleDetail(articleId).then(res => {
-        if (res.success) {
-            article.value = res.data
+        if (!res.success && res.errorCode == '20010') {
+            router.push({ name: 'NotFound' })
+            return
         }
+
+        article.value = res.data
     })
 }
 
@@ -194,7 +201,7 @@ onMounted(() => {
     const observer = new MutationObserver(mutationsList => {
         for (let mutation of mutationsList) {
             if (mutation.type === 'childList') {
-            	// 获取所有 pre code 节点
+                // 获取所有 pre code 节点
                 let highlight = document.querySelectorAll('pre code')
                 // 循环高亮
                 highlight.forEach((block) => {
@@ -204,7 +211,7 @@ onMounted(() => {
         }
     })
 
-	// 配置监视子节点的变化
+    // 配置监视子节点的变化
     const config = { childList: true, subtree: true }
     // 开始观察正文内容变化
     observer.observe(articleContentRef.value, config)

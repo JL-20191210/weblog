@@ -102,7 +102,7 @@
             </aside>
         </div>
     </main>
-
+    <ScrollToTopButton></ScrollToTopButton>
     <Footer></Footer>
 </template>
 
@@ -112,6 +112,7 @@ import Footer from '@/layouts/frontend/components/Footer.vue';
 import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue';
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue';
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue';
+import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
 import { ref } from 'vue';
 import { getArticlePageList } from '@/api/frontend/article';
 import { useRouter } from 'vue-router';

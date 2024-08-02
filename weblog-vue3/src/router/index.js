@@ -9,6 +9,7 @@ import AdminBlogSetting from '@/pages/admin/blog-setting.vue'
 import ArchiveList from '@/pages/frontend/archive-list.vue'
 import TagArticleList from '@/pages/frontend/tag-article-list.vue'
 import ArticleDetail from '@/pages/frontend/article-detail.vue'
+import NotFound from '@/pages/frontend/404.vue'
 
 import {createRouter,createWebHashHistory} from 'vue-router'
 import CategoryList from "@/pages/frontend/category-list.vue";
@@ -71,6 +72,14 @@ const routes = [
         component: ArticleDetail,
         meta: { // meta 信息
             title: 'Weblog 详情页'
+        }
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: NotFound,
+        meta: {
+            title: '404 页'
         }
     },
     {

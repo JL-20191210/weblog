@@ -85,6 +85,7 @@
             </aside>
         </div>
     </main>
+    <ScrollToTopButton></ScrollToTopButton>
     <Footer></Footer>
 </template>
 
@@ -97,6 +98,7 @@ import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue
 import { getArchivePageList } from '@/api/frontend/archive.js'
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
 
 // 文章归档
 const archives = ref([])

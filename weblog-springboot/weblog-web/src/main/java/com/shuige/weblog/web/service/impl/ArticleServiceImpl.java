@@ -3,6 +3,7 @@ package com.shuige.weblog.web.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
+import com.shuige.weblog.admin.event.ReadArticleEvent;
 import com.shuige.weblog.common.domain.dos.*;
 import com.shuige.weblog.common.domain.mapper.*;
 import com.shuige.weblog.common.enums.ResponseCodeEnum;
@@ -17,6 +18,7 @@ import com.shuige.weblog.web.model.vo.tag.FindTagListRspVO;
 import com.shuige.weblog.web.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -47,6 +49,8 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleTagRelMapper articleTagRelMapper;
     @Autowired
     private ArticleContentMapper articleContentMapper;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
     @Override
     public Response findArticlePageList(FindIndexArticlePageListReqVO findIndexArticlePageListReqVO) {
         Long current = findIndexArticlePageListReqVO.getCurrent();
@@ -177,6 +181,7 @@ public class ArticleServiceImpl implements ArticleService {
             findArticleDetailRspVO.setNextArticle(nextArticleRspVO);
         }
 
+        eventPublisher.publishEvent(new ReadArticleEvent(this,articleId));
         return Response.success(findArticleDetailRspVO);
     }
 }
