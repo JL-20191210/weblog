@@ -33,6 +33,7 @@
 
             <!-- 分页列表 -->
             <el-table :data="tableData" border stripe style="width: 100%" v-loading="tableLoading">
+                <el-table-column prop="id" label="ID" width="50" />
                 <el-table-column prop="title" label="标题" width="380" />
                 <el-table-column prop="cover" label="封面" width="180">
                     <template #default="scope">
@@ -48,6 +49,11 @@
                             </el-icon>
                             编辑
                         </el-button>
+                        <el-button size="small" @click="goArticleDetailPage(scope.row.id)">
+                            <el-icon class="mr-1">
+                                <View />
+                            </el-icon>
+                            预览</el-button>
                         <el-button type="danger" size="small" @click="deleteArticleSubmit(scope.row)">
                             <el-icon class="mr-1">
                                 <Delete />
@@ -60,7 +66,8 @@
         </el-card>
 
         <!-- 发布文章 -->
-        <el-dialog v-model="isArticlePublishEditorShow" :show-close="false" :fullscreen="true" :close-on-press-escape="false">
+        <el-dialog v-model="isArticlePublishEditorShow" :show-close="false" :fullscreen="true"
+            :close-on-press-escape="false">
             <template #header="{ close, titleId, titleClass }">
                 <!-- 固钉组件，固钉到顶部 -->
                 <el-affix :offset="20" style="width: 100%;">
@@ -88,7 +95,8 @@
                 </el-form-item>
                 <el-form-item label="内容" prop="content">
                     <!-- Markdown 编辑器 -->
-                    <MdEditor v-model="form.content" @onUploadImg="onUploadImg" editorId="publishArticleEditor"></MdEditor>
+                    <MdEditor v-model="form.content" @onUploadImg="onUploadImg" editorId="publishArticleEditor">
+                    </MdEditor>
                 </el-form-item>
                 <el-form-item label="封面" prop="cover">
                     <el-upload class="avatar-uploader" action="#" :on-change="handleCoverChange" :auto-upload="false"
@@ -105,7 +113,8 @@
                 </el-form-item>
                 <el-form-item label="分类" prop="categoryId">
                     <el-select v-model="form.categoryId" clearable placeholder="---请选择---">
-                        <el-option v-for="item in categories" :key="item.value" :label="item.label" :value="item.value"/>
+                        <el-option v-for="item in categories" :key="item.value" :label="item.label"
+                            :value="item.value" />
                     </el-select>
                 </el-form-item>
                 <el-form-item label="标签" prop="tags">
@@ -113,14 +122,15 @@
                     <el-select v-model="form.tags" multiple filterable remote reserve-keyword placeholder="---请输入---"
                         remote-show-suffix :remote-method="remoteMethod" allow-create default-first-option
                         :loading="tagSelectLoading" size="large">
-                        <el-option v-for="item in tags" :key="item.value" :label="item.label" :value="item.value"/>
+                        <el-option v-for="item in tags" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                 </el-form-item>
             </el-form>
         </el-dialog>
 
         <!-- 编辑 -->
-        <el-dialog v-model="isArticleUpdateEditorShow" :show-close="false" :fullscreen="true" :close-on-press-escape="false">
+        <el-dialog v-model="isArticleUpdateEditorShow" :show-close="false" :fullscreen="true"
+            :close-on-press-escape="false">
             <template #header="{ close, titleId, titleClass }">
                 <!-- 固钉组件，固钉到顶部 -->
                 <el-affix :offset="20" style="width: 100%;">
@@ -142,17 +152,21 @@
                 </el-affix>
             </template>
             <!-- label-position="top" 用于指定 label 元素在上面 -->
-            <el-form :model="updateArticleForm" ref="updateArticleFormRef" label-position="top" size="large" :rules="rules">
+            <el-form :model="updateArticleForm" ref="updateArticleFormRef" label-position="top" size="large"
+                :rules="rules">
                 <el-form-item label="标题" prop="title">
-                    <el-input v-model="updateArticleForm.title" autocomplete="off" size="large" maxlength="40" clearable />
+                    <el-input v-model="updateArticleForm.title" autocomplete="off" size="large" maxlength="40"
+                        clearable />
                 </el-form-item>
                 <el-form-item label="内容" prop="content">
                     <!-- Markdown 编辑器 -->
-                    <MdEditor v-model="updateArticleForm.content" @onUploadImg="onUploadImg" editorId="publishArticleEditor"></MdEditor>
+                    <MdEditor v-model="updateArticleForm.content" @onUploadImg="onUploadImg"
+                        editorId="publishArticleEditor">
+                    </MdEditor>
                 </el-form-item>
                 <el-form-item label="封面" prop="cover">
-                    <el-upload class="avatar-uploader" action="#" :on-change="handleUpdateCoverChange" :auto-upload="false"
-                        :show-file-list="false">
+                    <el-upload class="avatar-uploader" action="#" :on-change="handleUpdateCoverChange"
+                        :auto-upload="false" :show-file-list="false">
                         <img v-if="updateArticleForm.cover" :src="updateArticleForm.cover" class="avatar">
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
@@ -165,15 +179,16 @@
                 </el-form-item>
                 <el-form-item label="分类" prop="categoryId">
                     <el-select v-model="updateArticleForm.categoryId" clearable placeholder="---请选择---">
-                        <el-option v-for="item in categories" :key="item.value" :label="item.label" :value="item.value"/>
+                        <el-option v-for="item in categories" :key="item.value" :label="item.label"
+                            :value="item.value" />
                     </el-select>
                 </el-form-item>
                 <el-form-item label="标签" prop="tags">
                     <!-- 标签选择 -->
-                    <el-select v-model="updateArticleForm.tags" multiple filterable remote reserve-keyword placeholder="---请输入---"
-                        remote-show-suffix :remote-method="remoteMethod" allow-create default-first-option
-                        :loading="tagSelectLoading" size="large">
-                        <el-option v-for="item in tags" :key="item.value" :label="item.label" :value="item.value"/>
+                    <el-select v-model="updateArticleForm.tags" multiple filterable remote reserve-keyword
+                        placeholder="---请输入---" remote-show-suffix :remote-method="remoteMethod" allow-create
+                        default-first-option :loading="tagSelectLoading" size="large">
+                        <el-option v-for="item in tags" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                 </el-form-item>
             </el-form>
@@ -192,13 +207,14 @@
 import { reactive, ref } from 'vue'
 import { Search, RefreshRight, Promotion } from '@element-plus/icons-vue'
 import moment from 'moment'
-import { getArticlePageList, deleteArticle,publishArticle,getArticleDetail,updateArticle } from '@/api/admin/article'
+import { getArticlePageList, deleteArticle, publishArticle, getArticleDetail, updateArticle } from '@/api/admin/article'
 import { showMessage, showModel } from '@/composables/util'
-import { getCategoryPageList,getCategorySelectList } from '@/api/admin/category'
-import { searchTags,getTagSelectList } from '@/api/admin/tag'
+import { getCategoryPageList, getCategorySelectList } from '@/api/admin/category'
+import { searchTags, getTagSelectList } from '@/api/admin/tag'
 import { MdEditor } from 'md-editor-v3'
 import { uploadFile } from '@/api/admin/file'
 import 'md-editor-v3/lib/style.css'
+import { useRouter } from 'vue-router'
 
 
 // 模糊搜索的文章标题
@@ -230,40 +246,40 @@ const tagSelectLoading = ref(false)
 //文章标签
 const tags = ref([])
 
-getCategorySelectList().then((e)=>{
+getCategorySelectList().then((e) => {
     console.log('获取分页数据');
     categories.value = e.data
 })
 
 // 根据用户输入的标签名称，远程模糊查询
-const remoteMethod = (query)=>{
-    console.log('远程搜索：'+tags.value);
+const remoteMethod = (query) => {
+    console.log('远程搜索：' + tags.value);
     //如果用户的查询关键词不为空
-    if(query){
+    if (query) {
         //显示loading
         tagSelectLoading.value = true
         //调用标签模糊查询接口
-        searchTags(query).then((e)=>{
-            if(e.success){
+        searchTags(query).then((e) => {
+            if (e.success) {
                 tags.value = e.data
             }
-        }).finally(()=>tagSelectLoading.value = false)
+        }).finally(() => tagSelectLoading.value = false)
     }
 }
 
-const publishArticleSubmit = ()=>{
-    console.log('提交md内容'+form.content);
+const publishArticleSubmit = () => {
+    console.log('提交md内容' + form.content);
 
     //校验表单
-    publishArticleFormRef.value.validate((valid)=>{
-        if(!valid){
+    publishArticleFormRef.value.validate((valid) => {
+        if (!valid) {
             return false
         }
 
-        publishArticle(form).then((res)=>{
-            if(res.success == false){
+        publishArticle(form).then((res) => {
+            if (res.success == false) {
                 let message = res.message
-                showMessage(message,'error')
+                showMessage(message, 'error')
             }
             return
         })
@@ -282,17 +298,17 @@ const publishArticleSubmit = ()=>{
     })
 }
 
-const updateSubmit = ()=>{
+const updateSubmit = () => {
     //校验表单
-    updateArticleFormRef.value.validate((valid)=>{
-        if(!valid){
+    updateArticleFormRef.value.validate((valid) => {
+        if (!valid) {
             return false
         }
 
-        updateArticle(updateArticleForm).then((res)=>{
-            if(res.success == false){
+        updateArticle(updateArticleForm).then((res) => {
+            if (res.success == false) {
                 let message = res.message
-                showMessage(message,'error')
+                showMessage(message, 'error')
             }
             return
         })
@@ -304,11 +320,11 @@ const updateSubmit = ()=>{
     })
 }
 
-const showArticleUpdateEditor = (row)=>{
+const showArticleUpdateEditor = (row) => {
     isArticleUpdateEditorShow.value = true
     let articleId = row.id
-    getArticleDetail(articleId).then((res)=>{
-        if(res.success){
+    getArticleDetail(articleId).then((res) => {
+        if (res.success) {
             updateArticleForm.id = res.data.id
             updateArticleForm.title = res.data.title
             updateArticleForm.cover = res.data.cover
@@ -342,7 +358,7 @@ const updateArticleForm = reactive({
     summary: ""
 })
 
-getTagSelectList().then((res=>{
+getTagSelectList().then((res => {
     tags.value = res.data
 }))
 
@@ -461,16 +477,16 @@ const handleUpdateCoverChange = (file) => {
     })
 }
 
-const onUploadImg = async(files,callback)=>{
+const onUploadImg = async (files, callback) => {
     const res = await Promise.all(
-        files.map((file)=>{
-            return new Promise((rev,rej)=>{
+        files.map((file) => {
+            return new Promise((rev, rej) => {
                 console.log('==>编辑器开始上传文件...');
-                let  formData = new FormData()
-                formData.append('file',file)
-                uploadFile(formData).then((res)=>{
+                let formData = new FormData()
+                formData.append('file', file)
+                uploadFile(formData).then((res) => {
                     console.log(res);
-                    console.log('访问路径：'+res.data.url);
+                    console.log('访问路径：' + res.data.url);
                     // 调用 callback 函数，回显上传图片(编辑器提供的)
                     callback([res.data.url])
                 })
@@ -502,6 +518,10 @@ const handleSizeChange = (chooseSize) => {
     getTableDate
 }
 
+const router = useRouter()
+const goArticleDetailPage = (articleId)=>{
+    router.push('/article/'+articleId)
+}
 </script>
 
 <style scoped>
