@@ -1,11 +1,18 @@
 package com.shuige.weblog.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.shuige.weblog.admin.model.vo.dashboard.FindDashboardPVStatisticsInfoRspVO;
 import com.shuige.weblog.admin.model.vo.dashboard.FindDashboardStatisticsInfoRspVO;
 import com.shuige.weblog.admin.service.AdminDashboardService;
+import com.shuige.weblog.common.constant.Constants;
 import com.shuige.weblog.common.domain.dos.ArticleDO;
+import com.shuige.weblog.common.domain.dos.ArticlePublishCountDO;
+import com.shuige.weblog.common.domain.dos.StatisticsArticlePVDO;
 import com.shuige.weblog.common.domain.mapper.ArticleMapper;
 import com.shuige.weblog.common.domain.mapper.CategoryMapper;
+import com.shuige.weblog.common.domain.mapper.StatisticsArticlePVMapper;
 import com.shuige.weblog.common.domain.mapper.TagMapper;
 import com.shuige.weblog.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author felix
@@ -21,6 +30,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@SuppressWarnings("all")
 public class AdminDashboardServiceImpl implements AdminDashboardService {
 
     @Autowired
@@ -29,6 +39,9 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
     private CategoryMapper categoryMapper;
     @Autowired
     private TagMapper tagMapper;
+
+    @Autowired
+    private StatisticsArticlePVMapper articlePVMapper;
 
     /**
      * 获取仪表盘基础统计信息
@@ -63,6 +76,65 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
                 .pvTotalCount(pvTotalCount)
                 .build();
 
+        return Response.success(vo);
+    }
+
+    @Override
+    public Response findDashboardPublishArticleStatistics() {
+        // 当前时间
+        LocalDate currentDate = LocalDate.now();
+
+        // 一年前的时间
+        LocalDate startDate = currentDate.minusYears(1);
+
+        List<ArticlePublishCountDO> articlePublishCountDOS = articleMapper.selectDateArticlePublishCount(startDate, currentDate);
+
+        Map<LocalDate,Long> map = null;
+        if(!CollectionUtils.isEmpty(articlePublishCountDOS)){
+            Map<LocalDate,Long> dateArticleCountMap = articlePublishCountDOS.stream().collect(Collectors.toMap(ArticlePublishCountDO::getDate,ArticlePublishCountDO::getCount));
+            map = Maps.newLinkedHashMap();
+            for(;startDate.isBefore(currentDate)||startDate.isEqual(currentDate);startDate=startDate.plusDays(1)){
+                // 以日期作为 key 从 dateArticleCountMap 中取文章发布总量
+                Long count = dateArticleCountMap.get(startDate);
+                // 设置到返参 Map
+                map.put(startDate, Objects.isNull(count)?0:count);
+            }
+        }
+
+        return Response.success(map);
+    }
+
+    @Override
+    public Response findDashboardPVStatistics() {
+        List<StatisticsArticlePVDO> articlePVDOS = articlePVMapper.selectLatestWeekRecords();
+
+        Map<LocalDate, Long> pvDateCountMap = Maps.newHashMap();
+        if(!CollectionUtils.isEmpty(articlePVDOS)){
+            pvDateCountMap = articlePVDOS.stream().collect(Collectors.toMap(StatisticsArticlePVDO::getPvDate,StatisticsArticlePVDO::getPvCount));
+        }
+
+        FindDashboardPVStatisticsInfoRspVO vo = null;
+
+        // 日期集合
+        List<String> pvDates = Lists.newArrayList();
+
+        // PV 集合
+        List<Long> pvCounts = Lists.newArrayList();
+
+        LocalDate currDate = LocalDate.now();
+
+        LocalDate tmpDate = currDate.minusWeeks(1);
+
+        for(;tmpDate.isBefore(currDate)||tmpDate.isEqual(currDate);tmpDate = tmpDate.plusDays(1)){
+            pvDates.add(tmpDate.format(Constants.MONTH_DAY_FORMATTER));
+            Long pvCount = pvDateCountMap.get(tmpDate);
+            pvCounts.add(Objects.isNull(pvCount)?0:pvCount);
+        }
+
+        vo = FindDashboardPVStatisticsInfoRspVO.builder()
+                .pvDates(pvDates)
+                .pvCounts(pvCounts)
+                .build();
         return Response.success(vo);
     }
 }

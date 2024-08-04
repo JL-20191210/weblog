@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shuige.weblog.common.domain.dos.ArticleDO;
+import com.shuige.weblog.common.domain.dos.ArticlePublishCountDO;
+import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -104,4 +106,9 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
         return selectList(Wrappers.<ArticleDO>lambdaQuery()
                 .select(ArticleDO::getReadNum));
     }
+
+    @Select("SELECT DATE(create_time) AS date, COUNT(*) AS count FROM t_article \n" +
+            "WHERE create_time >= #{startDate} AND create_time < #{endDate} \n" +
+            "GROUP BY DATE(create_time) \n")
+    List<ArticlePublishCountDO> selectDateArticlePublishCount(LocalDate startDate,LocalDate endDate);
 }
