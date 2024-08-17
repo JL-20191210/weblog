@@ -2,8 +2,8 @@
     <div  class="fixed overflow-y-auto bg-slate-800 h-screen text-white menu-container transition-all" :style="{ width:menuStore.menuWidth }">
         <!-- 顶部 Logo, 指定高度为 64px, 和右边的 Header 头保持一样高 -->
         <div class="flex items-center justify-center h-[64px]">
-            <img v-if="menuStore.menuWidth=='250px'" src="@/assets/weblog-logo.png" class="h-[200px] w-[300px]">
-            <img v-else src="@/assets/weblog-logo.png" class="h-[100px] w-[150px]">
+            <img v-if="menuStore.menuWidth=='250px'" src="@/assets/weblog-logo.png" class="h-[100px] w-[150px]">
+            <img v-else src="@/assets/weblog-logo.png" class="h-[60px] w-[90px]">
         </div>
 
         <!-- 下方菜单 -->

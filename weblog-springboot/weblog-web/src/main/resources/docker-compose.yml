@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  weblog:
+    image: openjdk:8-jre-slim
+    container_name: weblog
+    working_dir: /app/weblog/code
+    volumes:
+      - ./code/weblog-web-0.0.1-SNAPSHOT.jar:/app/weblog/code/weblog-web-0.0.1-SNAPSHOT.jar
+      - ./code/application.yml:/app/weblog/code/application.yml
+    ports:
+      - "8100:8100"
+    command: ["java", "-jar", "weblog-web-0.0.1-SNAPSHOT.jar"]

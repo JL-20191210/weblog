@@ -84,8 +84,8 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
         // 当前时间
         LocalDate currentDate = LocalDate.now();
 
-        // 一年前的时间
-        LocalDate startDate = currentDate.minusYears(1);
+        // 四个月的时间
+        LocalDate startDate = currentDate.minusMonths(4);
 
         List<ArticlePublishCountDO> articlePublishCountDOS = articleMapper.selectDateArticlePublishCount(startDate, currentDate);
 

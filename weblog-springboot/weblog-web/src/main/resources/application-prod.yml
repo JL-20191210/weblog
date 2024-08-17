@@ -1,10 +1,12 @@
+
 logging:
   config: classpath:logback-weblog.xml
 
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://81.70.62.114:33306/weblog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    #生产环境不要启用 p6spy
+    url: jdbc:mysql://192.168.68.86:3306/weblog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: felix
     password: 123456a!
     hikari:
@@ -16,3 +18,35 @@ spring:
       max-lifetime: 1800000
       connection-timeout: 30000
       connection-test-query: SELECT 1
+  servlet:
+    multipart:
+      max-file-size: 10MB # 限制单个上传文件的最大大小为 10MB。如果上传的文件大小超过这个值，将会被拒绝上传。
+      max-request-size: 10MB # 限制整个上传请求的最大大小为 10MB。这包括所有上传文件的大小之和。如果请求总大小超过这个值，将会被拒绝。
+
+  security:
+    user:
+      name: admin # 登录用户名
+      password: 123456 # 登录密码
+
+jwt:
+  # 签发人
+  issuer: shuige
+  # 秘钥
+  secret: 1pWQRLxRlbAjctkp+yMUO9nMqrXEOqYFYCP/v3GsvuQOAW2ZMMztvZ/qPExap6H4jw2EYjbXM5zcqZPfPAKTrg==
+  #token 过期时间 分钟
+  tokenExpireTime: 1440
+  #token请求头中的Key值
+  tokenHeaderKey: Authorization
+  #token请求头中的value值前缀
+  tokenPrefix: Bearer
+server:
+  port: 8081
+
+#=================================================================
+# minio
+#=================================================================
+minio:
+  endpoint: http://192.168.68.86:19000
+  accessKey: felix
+  secretKey: YINSHI9981
+  bucketName: weblog

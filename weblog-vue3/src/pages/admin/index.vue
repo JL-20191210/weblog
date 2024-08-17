@@ -28,8 +28,6 @@
                 </div>
             </div>
 
-
-            <!-- 分类数 -->
             <!-- 分类数 -->
             <div class="col-span-4 md:col-span-1">
                 <!-- 卡片 -->
@@ -67,7 +65,7 @@
                     </svg>
                     <div class="ml-5">
                         <h2 class="mb-1">分类</h2>
-                        <CountTo :value="categoryTotalCount"></CountTo>
+                        <CountTo :value="categoryTotalCount" customClass="font-bold text-2xl"></CountTo>
                     </div>
                 </div>
             </div>
@@ -175,7 +173,7 @@
                                 d="M700.2 514.5H200.5c-16.6 0-30 13.4-30 30s13.4 30 30 30h499.7c16.6 0 30-13.4 30-30s-13.5-30-30-30zM668.4 689.8h-74c-16.6 0-30 13.4-30 30s13.4 30 30 30h74c16.6 0 30-13.4 30-30s-13.4-30-30-30zM479.3 689.8H200.5c-16.6 0-30 13.4-30 30s13.4 30 30 30h278.8c16.6 0 30-13.4 30-30s-13.4-30-30-30z"
                                 fill="#33CC99" p-id="43939"></path>
                         </svg>
-                        近半年文章发布热点图
+                        近期文章发布热点图
                     </h2>
                     <ArticlePublishCalendar :value="articlePublishInfo"></ArticlePublishCalendar>
                 </div>

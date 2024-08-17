@@ -85,7 +85,7 @@ public class AdminTagServiceImpl extends ServiceImpl<TagMapper, TagDO> implement
     public Response deleteTag(DeleteTagReqVO deleteTagReqVO) {
         Long tagId = deleteTagReqVO.getId();
         ArticleTagRelDO articleTagRelDO = articleTagRelMapper.selectOneByTagId(tagId);
-        if(!Objects.nonNull(articleTagRelDO)){
+        if(Objects.nonNull(articleTagRelDO)){
             log.warn("==> 此标签下包含文章，无法删除，tagId: {}", tagId);
             throw new BizException(ResponseCodeEnum.TAG_CAN_NOT_DELETE);
         }

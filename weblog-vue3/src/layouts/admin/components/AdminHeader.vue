@@ -46,7 +46,7 @@
                 <el-dropdown class="flex items-center justify-center" @command="handelCommand">
                     <span class="el-dropdown-link flex items-center justify-center text-gray-700 text-xs">
                         <!-- 头像Avater -->
-                        <el-avatar :size="25" src="https://img.picui.cn/free/2024/06/30/66810b089f214.jpg" />
+                        <el-avatar :size="25" :src="blogSettingsStore.blogSettings.avatar" />
                         {{ userStore.userInfo.username }}
                         <el-icon class="el-icon--right">
                             <arrow-down />
@@ -111,6 +111,7 @@ import { ref, reactive, watch } from 'vue'
 import { useFullscreen } from '@vueuse/core'
 import { useMenuStore } from '@/stores/menu'
 import { useUserStore } from '@/stores/user'
+import { useBlogSettingsStore } from '@/stores/blogsettings';
 import { useRouter } from 'vue-router'
 import { showMessage, showModel } from '@/composables/util'
 import { updateAdminPassword } from '@/api/admin/user'
@@ -128,6 +129,9 @@ const formDialogRef = ref(null)
 
 // 表单引用
 const formRef = ref(null)
+
+// 引入博客设置信息 store
+const blogSettingsStore = useBlogSettingsStore()
 
 // 修改用户密码表单对象
 const form = reactive({

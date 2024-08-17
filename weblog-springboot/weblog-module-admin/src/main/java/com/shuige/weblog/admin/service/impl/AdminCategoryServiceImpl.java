@@ -98,7 +98,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
 
         ArticleCategoryRelDO articleCategoryRelDO = articleCategoryRelMapper.selectOneByCategoryId(categoryId);
 
-        if(!Objects.nonNull(articleCategoryRelDO)){
+        if(Objects.nonNull(articleCategoryRelDO)){
             log.warn("==> 此分类下包含文章，无法删除，categoryId: {}", categoryId);
             throw new BizException(ResponseCodeEnum.CATEGORY_CAN_NOT_DELETE);
         }
