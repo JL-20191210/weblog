@@ -3,6 +3,9 @@ package com.shuige.weblog.admin.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.shuige.weblog.admin.convert.ArticleDetailConvert;
+import com.shuige.weblog.admin.event.DeleteArticleEvent;
+import com.shuige.weblog.admin.event.PublishArticleEvent;
+import com.shuige.weblog.admin.event.UpdateArticleEvent;
 import com.shuige.weblog.admin.model.vo.article.*;
 import com.shuige.weblog.admin.service.AdminArticleService;
 import com.shuige.weblog.common.domain.dos.*;
@@ -13,6 +16,7 @@ import com.shuige.weblog.common.utils.PageResponse;
 import com.shuige.weblog.common.utils.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -51,6 +55,9 @@ public class AdminArticleServiceImpl implements AdminArticleService {
 
     @Autowired
     private ArticleTagRelMapper articleTagRelMapper;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     /**
      * 发布文章
@@ -97,6 +104,9 @@ public class AdminArticleServiceImpl implements AdminArticleService {
         List<String> publishTags = publishArticleReqVO.getTags();
         insertTags(articleId,publishTags);
 
+        // 发送文章发布事件
+        eventPublisher.publishEvent(new PublishArticleEvent(this, articleId));
+
         return Response.success();
     }
 
@@ -117,6 +127,9 @@ public class AdminArticleServiceImpl implements AdminArticleService {
         articleCategoryRelMapper.deleteByArticleIdInt(articleId);
 
         articleTagRelMapper.deleteByArticleIdInt(articleId);
+
+        // 发布文章删除事件
+        eventPublisher.publishEvent(new DeleteArticleEvent(this, articleId));
 
         return Response.success();
     }
@@ -218,6 +231,8 @@ public class AdminArticleServiceImpl implements AdminArticleService {
         articleTagRelMapper.deleteByArticleIdInt(articleId);
         List<String> tags = updateArticleReqVO.getTags();
         insertTags(articleId,tags);
+
+        eventPublisher.publishEvent(new UpdateArticleEvent(this,articleId));
 
         return Response.success();
     }

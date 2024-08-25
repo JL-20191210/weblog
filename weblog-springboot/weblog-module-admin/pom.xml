@@ -75,6 +75,11 @@
             <artifactId>mapstruct</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.shuige</groupId>
+            <artifactId>weblog-module-search</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
