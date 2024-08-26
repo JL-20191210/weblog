@@ -16,6 +16,7 @@ import com.shuige.weblog.web.model.vo.article.*;
 import com.shuige.weblog.web.model.vo.category.FindCategoryListRspVO;
 import com.shuige.weblog.web.model.vo.tag.FindTagListRspVO;
 import com.shuige.weblog.web.service.ArticleService;
+import com.shuige.weblog.web.utils.MarkdownStatsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -143,6 +144,12 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleCategoryRelDO articleCategoryRelDOS = articleCategoryRelMapper.selectByArticleId(articleId);
         CategoryDO categoryDO = categoryMapper.selectById(articleCategoryRelDOS.getCategoryId());
 
+        // 查询正文
+        String content = articleContentDO.getContent();
+
+        // 计算 md 正文字数
+        Integer totalWords = MarkdownStatsUtil.calculateWordCount(content);
+
         //DO转VO
         FindArticleDetailRspVO findArticleDetailRspVO = FindArticleDetailRspVO.builder()
                 .title(articleDO.getTitle())
@@ -151,6 +158,8 @@ public class ArticleServiceImpl implements ArticleService {
                 .readNum(articleDO.getReadNum())
                 .categoryId(categoryDO.getId())
                 .categoryName(categoryDO.getName())
+                .totalWords(totalWords)
+                .readTime(MarkdownStatsUtil.calculateReadingTime(totalWords))
                 .build();
 
         List<ArticleTagRelDO> articleTagRelDOS = articleTagRelMapper.selectByArticleId(articleId);
