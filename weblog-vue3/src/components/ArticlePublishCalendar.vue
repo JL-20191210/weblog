@@ -19,7 +19,7 @@ const props = defineProps({
 // 当前日期
 const currentDate = new Date();
 // 半年前
-const sixMonthsAgo = subMonths(currentDate, 4)
+const sixMonthsAgo = subMonths(currentDate, 6)
 
 // 格式化后的开始、结束日期
 const startDate = format(sixMonthsAgo, 'yyyy-MM-dd')
@@ -40,7 +40,7 @@ function initCalendar() {
     }
 
     var chartDom = document.getElementById('calendar');
-    var myChart = echarts.init(chartDom);
+    var myChart = echarts.init(chartDom, null, { width: 600 });
     var option;
 
     option = {

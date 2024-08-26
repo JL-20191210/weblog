@@ -2,7 +2,7 @@ import Index from "@/pages/frontend/index.vue";
 import Login from '@/pages/admin/login.vue';
 import AdminIndex from '@/pages/admin/index.vue'
 import Admin from '@/layouts/admin/admin.vue';
-import AdminArticleList from'@/pages/admin/article-list.vue'
+import AdminArticleList from '@/pages/admin/article-list.vue'
 import AdminCategoryList from '@/pages/admin/category-list.vue'
 import AdminTagList from '@/pages/admin/tag-list.vue'
 import AdminBlogSetting from '@/pages/admin/blog-setting.vue'
@@ -11,7 +11,7 @@ import TagArticleList from '@/pages/frontend/tag-article-list.vue'
 import ArticleDetail from '@/pages/frontend/article-detail.vue'
 import NotFound from '@/pages/frontend/404.vue'
 
-import {createRouter,createWebHashHistory} from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import CategoryList from "@/pages/frontend/category-list.vue";
 import CategoryArticleList from "@/pages/frontend/category-article-list.vue";
 import TagList from "@/pages/frontend/tag-list.vue";
@@ -83,44 +83,44 @@ const routes = [
         }
     },
     {
-        path:"/admin",//后台首页
-        component:Admin,//对应admin.vue的布局文件
+        path: "/admin",//后台首页
+        component: Admin,//对应admin.vue的布局文件
         // 使用到admin.vue布局的，都要放置在其子路由下面
-        children:[
+        children: [
             {
-                path:"/admin/index",
-                component:AdminIndex,
-                meta:{
-                    title:"Admin后台首页"
+                path: "/admin/index",
+                component: AdminIndex,
+                meta: {
+                    title: "Admin后台首页"
                 }
             },
             {
-                path:"/admin/article/list",
-                component:AdminArticleList,
-                meta:{
-                    title:"文章管理"
+                path: "/admin/article/list",
+                component: AdminArticleList,
+                meta: {
+                    title: "文章管理"
                 }
             },
 
             {
-                path:"/admin/category/list",
-                component:AdminCategoryList,
-                meta:{
-                    title:"分类管理"
+                path: "/admin/category/list",
+                component: AdminCategoryList,
+                meta: {
+                    title: "分类管理"
                 }
             },
             {
-                path:"/admin/tag/list",
-                component:AdminTagList,
-                meta:{
-                    title:"标签管理"
+                path: "/admin/tag/list",
+                component: AdminTagList,
+                meta: {
+                    title: "标签管理"
                 }
             },
             {
-                path:"/admin/blog/setting",
-                component:AdminBlogSetting,
-                meta:{
-                    title:"博客设置"
+                path: "/admin/blog/setting",
+                component: AdminBlogSetting,
+                meta: {
+                    title: "博客设置"
                 }
             },
 
@@ -135,6 +135,11 @@ const router = createRouter({
 
     // routes: routes 的缩写
     routes,
+
+    // 每次切换路由后，页面滚动到顶部
+    scrollBehavior() {
+        return { top: 0 }
+    }
 })
 
 //ES6模块到处语句，它用于将router对象导出，以便其他文件可以导入和使用这个对象

@@ -46,7 +46,7 @@ server:
 # minio
 #=================================================================
 minio:
-  endpoint: http://192.168.68.86:19000
+  endpoint: http://81.70.62.114:19000
   accessKey: felix
   secretKey: YINSHI9981
   bucketName: weblog

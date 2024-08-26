@@ -488,16 +488,19 @@ onMounted(() => {
     font-size: 98%;
 }
 
+/* pre 样式 */
 ::v-deep(pre) {
     margin-bottom: 20px;
+    padding-top: 30px;
+    background: #21252b;
+    border-radius: 6px;
+    position: relative;
 }
 
 ::v-deep(pre code.hljs) {
-    padding-top: 2rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-bottom: 0.7rem;
-    border-radius: 6px;
+    padding: 0.7rem 1rem;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
 }
 
 ::v-deep(pre:before) {
@@ -506,7 +509,7 @@ onMounted(() => {
     box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
     content: ' ';
     height: 10px;
-    margin-top: 10px;
+    margin-top: -19px;
     margin-left: 10px;
     position: absolute;
     width: 10px;
