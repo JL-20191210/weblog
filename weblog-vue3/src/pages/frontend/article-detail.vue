@@ -210,7 +210,7 @@ import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.v
 import Toc from '@/layouts/frontend/components/Toc.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getArticleDetail } from '@/api/frontend/article'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, nextTick } from 'vue'
 import hljs from 'highlight.js'
 // 代码高亮样式
 import 'highlight.js/styles/tokyo-night-dark.css'
@@ -239,7 +239,80 @@ function refreshArticleDetail(articleId) {
         }
 
         article.value = res.data
+
+        nextTick(() => {
+            // 获取所有 pre code 节点
+            let highlight = document.querySelectorAll('pre code')
+            // 循环高亮
+            highlight.forEach((block) => {
+                hljs.highlightElement(block)
+            })
+
+            // 获取所有的 pre 节点
+            let preElements = document.querySelectorAll('pre')
+            preElements.forEach(preElement => {
+                // 找到第一个 code 元素
+                let firstCode = preElement.querySelector('code');
+                if (firstCode) {
+                    let copyCodeBtn = '<button class="hidden copy-code-btn flex items-center justify-center"><div class="copy-icon"></div></button>'
+                    firstCode.insertAdjacentHTML('beforebegin', copyCodeBtn);
+
+                    // 获取刚插入的按钮
+                    let copyBtn = firstCode.previousSibling;
+                    copyBtn.addEventListener('click', () => {
+                        // 添加 copied 样式
+                        copyBtn.classList.add('copied');
+                        copyToClipboard(preElement.textContent)
+                        // 1.5 秒后移除 copied 样式
+                        setTimeout(() => {
+                            copyBtn.classList.remove('copied');
+                        }, 1500);
+                    });
+
+                    // 添加事件监听器
+                    preElement.addEventListener('mouseenter', handleMouseEnter);
+                    preElement.addEventListener('mouseleave', handleMouseLeave);
+                }
+            })
+        })
+
+        // 复制内容到剪切板
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
     })
+}
+
+const handleMouseEnter = (event) => {
+    // 鼠标移入，显示按钮
+    let copyBtn = event.target.querySelector('button');
+    if (copyBtn) {
+        copyBtn.classList.remove('hidden');
+        copyBtn.classList.add('block');
+    }
+}
+
+const handleMouseLeave = (event) => {
+    // 鼠标移出，隐藏按钮
+    let copyBtn = event.target.querySelector('button');
+    if (copyBtn) {
+        copyBtn.classList.add('hidden');
+    }
+}
+
+// 复制内容到剪切板
+function copyToClipboard(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
 }
 
 refreshArticleDetail(route.params.articleId)
@@ -254,30 +327,6 @@ const goTagArticleListPage = (id, name) => {
     router.push({ path: '/tag/article/list', query: { id, name } })
 }
 
-// 正文 div 引用
-const articleContentRef = ref(null)
-onMounted(() => {
-    initTooltips()
-
-    // 使用 MutationObserver 监视 DOM 的变化
-    const observer = new MutationObserver(mutationsList => {
-        for (let mutation of mutationsList) {
-            if (mutation.type === 'childList') {
-                // 获取所有 pre code 节点
-                let highlight = document.querySelectorAll('pre code')
-                // 循环高亮
-                highlight.forEach((block) => {
-                    hljs.highlightBlock(block)
-                })
-            }
-        }
-    })
-
-    // 配置监视子节点的变化
-    const config = { childList: true, subtree: true }
-    // 开始观察正文内容变化
-    observer.observe(articleContentRef.value, config)
-})
 </script>
 <style scoped>
 /* h1, h2, h3, h4, h5, h6 标题样式 */
@@ -513,5 +562,72 @@ onMounted(() => {
     margin-left: 10px;
     position: absolute;
     width: 10px;
+}
+
+::v-deep(.copy-code-btn) {
+    border-width: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    z-index: 5;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border-radius: 0.5rem;
+    opacity: 0;
+    transition: opacity .4s;
+    opacity: 1
+}
+
+::v-deep(.copy-code-btn:hover) {
+    background: #2f3542;
+}
+
+::v-deep(.copy-icon) {
+    --copy-icon: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' height='20' width='20' stroke='rgba(128,128,128,1)' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2'/%3E%3C/svg%3E");
+    background: currentcolor;
+    -webkit-mask-image: var(--copy-icon);
+    mask-image: var(--copy-icon);
+    -webkit-mask-position: 50%;
+    mask-position: 50%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 1em;
+    mask-size: 1em;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0.625rem;
+    color: #9e9e9e;
+    font-size: 1.25rem;
+}
+
+::v-deep(.copied) {
+    display: flex;
+    background: #2f3542;
+}
+
+::v-deep(.copied:after) {
+    content: "已复制";
+    position: absolute;
+    top: 0;
+    right: calc(100% + .25rem);
+    display: block;
+    height: 2.5rem;
+    padding: .625rem;
+    border-radius: .5rem;
+    background: #2f3542;
+    color: #9e9e9e;
+    font-weight: 500;
+    line-height: 1.25rem;
+    white-space: nowrap;
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Arial, sans-serif;
+}
+
+::v-deep(.copied .copy-icon) {
+    --copied-icon: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' height='20' width='20' stroke='rgba(128,128,128,1)' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4'/%3E%3C/svg%3E");
+    -webkit-mask-image: var(--copied-icon);
+    mask-image: var(--copied-icon);
 }
 </style>
