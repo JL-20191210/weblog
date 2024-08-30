@@ -9,10 +9,10 @@
             <div class="col-span-4  md:col-span-3 mb-3">
                 <!-- 文章列表，grid布局，分为两列 -->
                 <div class="grid grid-cols-2 gap-4">
-                    <div v-for="(article, index) in articles" :key="index" class="col-span-2 md:col-span-1">
+                    <div v-for="(article, index) in articles" :key="index" class="col-span-2 md:col-span-1 animate__animated animate__fadeInUp">
                         <!-- 文章卡片 -->
                         <div
-                            class="max-w-sm bg-white border h-full border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                            class="max-w-sm hover:scale-[1.03] bg-white border h-full border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                             <a @click="goArticleDetailPage(article.id)" class="cursor-pointer">
                                 <img class="rounded-t-lg h-48 w-full" :src="article.cover" />
                             </a>
@@ -25,8 +25,9 @@
                                     </span>
                                 </div>
                                 <a @click="goArticleDetailPage(article.id)" class="cursor-pointer">
-                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        {{ article.title }}</h5>
+                                    <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        <span class="hover:border-gray-600 hover:border-b-2">{{ article.title }}</span>
+                                    </h2>
                                 </a>
                                 <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ article.summary }}
                                 </p>
@@ -91,7 +92,7 @@
                 </nav>
             </div>
             <!-- 右边侧边栏，占用一列 -->
-            <aside class="col-span-4  md:col-span-1">
+            <aside class="col-span-4  md:col-span-1 animate__animated animate__fadeInUp">
                 <div class="sticky top-[5.5rem]">
                     <UserInfoCard></UserInfoCard>
                     <!-- 分类 -->
