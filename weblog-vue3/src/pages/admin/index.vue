@@ -208,7 +208,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 import { getBaseStatisticsInfo, getPublishArticleStatisticsInfo,getArticlePVStatisticsInfo  } from '@/api/admin/dashboard'
 import CountTo from '@/components/CountTo.vue'
 import ArticlePublishCalendar from '@/components/ArticlePublishCalendar.vue'
@@ -251,5 +251,10 @@ getArticlePVStatisticsInfo().then((res) => {
     if (res.success) {
         articlePVInfo.value = res.data
     }
+})
+
+onMounted(() => {
+    // 移除 html 标签中的 class="dark"
+    document.documentElement.classList.remove('dark');
 })
 </script>

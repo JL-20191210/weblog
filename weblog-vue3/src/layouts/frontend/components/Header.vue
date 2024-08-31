@@ -1,6 +1,6 @@
 <template>
     <header class="sticky top-0 z-10">
-        <nav class="bg-white border-gray-200 border-b dark:bg-gray-900">
+        <nav class="bg-white border-gray-200 border-b dark:bg-gray-900 dark:border-gray-800">
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="/" class="flex items-center">
                     <img :src="blogSettingsStore.blogSettings.logo" class="h-8 mr-3" alt="Flowbite Logo" />
@@ -8,20 +8,63 @@
                         {{ blogSettingsStore.blogSettings.name }}</span>
                 </a>
                 <div class="flex md:order-2 items-center">
+                    <!-- 白天黑夜切换 -->
+                    <button @click="toggleDark()" class="ml-1 mr-4 vt-switch vt-switch-appearance" type="button"
+                        role="switch" aria-label="切换深色模式" aria-checked="false" data-v-d401ce6f=""><span
+                            class="vt-switch-check"><span class="vt-switch-icon"><!--[-->
+                                <!-- 太阳图标 -->
+                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"
+                                    viewBox="0 0 24 24" class="vt-switch-appearance-sun"
+                                    :class="[isDark ? 'hidden' : 'block']">
+                                    <path
+                                        d="M12,18c-3.3,0-6-2.7-6-6s2.7-6,6-6s6,2.7,6,6S15.3,18,12,18zM12,8c-2.2,0-4,1.8-4,4c0,2.2,1.8,4,4,4c2.2,0,4-1.8,4-4C16,9.8,14.2,8,12,8z">
+                                    </path>
+                                    <path d="M12,4c-0.6,0-1-0.4-1-1V1c0-0.6,0.4-1,1-1s1,0.4,1,1v2C13,3.6,12.6,4,12,4z">
+                                    </path>
+                                    <path
+                                        d="M12,24c-0.6,0-1-0.4-1-1v-2c0-0.6,0.4-1,1-1s1,0.4,1,1v2C13,23.6,12.6,24,12,24z">
+                                    </path>
+                                    <path
+                                        d="M5.6,6.6c-0.3,0-0.5-0.1-0.7-0.3L3.5,4.9c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l1.4,1.4c0.4,0.4,0.4,1,0,1.4C6.2,6.5,5.9,6.6,5.6,6.6z">
+                                    </path>
+                                    <path
+                                        d="M19.8,20.8c-0.3,0-0.5-0.1-0.7-0.3l-1.4-1.4c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l1.4,1.4c0.4,0.4,0.4,1,0,1.4C20.3,20.7,20,20.8,19.8,20.8z">
+                                    </path>
+                                    <path d="M3,13H1c-0.6,0-1-0.4-1-1s0.4-1,1-1h2c0.6,0,1,0.4,1,1S3.6,13,3,13z"></path>
+                                    <path d="M23,13h-2c-0.6,0-1-0.4-1-1s0.4-1,1-1h2c0.6,0,1,0.4,1,1S23.6,13,23,13z">
+                                    </path>
+                                    <path
+                                        d="M4.2,20.8c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l1.4-1.4c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-1.4,1.4C4.7,20.7,4.5,20.8,4.2,20.8z">
+                                    </path>
+                                    <path
+                                        d="M18.4,6.6c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l1.4-1.4c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-1.4,1.4C18.9,6.5,18.6,6.6,18.4,6.6z">
+                                    </path>
+                                </svg>
+                                <!-- 黑夜图标 -->
+                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"
+                                    viewBox="0 0 24 24" class="vt-switch-appearance-moon"
+                                    :class="[isDark ? 'block' : 'hidden']">
+                                    <path
+                                        d="M12.1,22c-0.3,0-0.6,0-0.9,0c-5.5-0.5-9.5-5.4-9-10.9c0.4-4.8,4.2-8.6,9-9c0.4,0,0.8,0.2,1,0.5c0.2,0.3,0.2,0.8-0.1,1.1c-2,2.7-1.4,6.4,1.3,8.4c2.1,1.6,5,1.6,7.1,0c0.3-0.2,0.7-0.3,1.1-0.1c0.3,0.2,0.5,0.6,0.5,1c-0.2,2.7-1.5,5.1-3.6,6.8C16.6,21.2,14.4,22,12.1,22zM9.3,4.4c-2.9,1-5,3.6-5.2,6.8c-0.4,4.4,2.8,8.3,7.2,8.7c2.1,0.2,4.2-0.4,5.8-1.8c1.1-0.9,1.9-2.1,2.4-3.4c-2.5,0.9-5.3,0.5-7.5-1.1C9.2,11.4,8.1,7.7,9.3,4.4z">
+                                    </path>
+                                </svg><!--]--></span></span></button>
                     <!-- 搜索框 -->
-                    <button type="button" @click="clickSearchBtn"
-                        class="mr-2 hidden outline-none md:flex items-center text-sm leading-6 text-slate-400 rounded-md ring-1 ring-slate-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-slate-300 dark:bg-slate-800 dark:highlight-white/5 dark:hover:bg-slate-700">
+                    <button type="button" @click="clickSearchBtn" class="mr-2 hidden outline-none md:flex items-center text-sm leading-6 text-slate-400 rounded-md 
+                        ring-1 ring-slate-900/10 shadow-sm py-1.5 pl-2 pr-3 hover:ring-slate-300 
+                        dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:ring-slate-700">
                         <svg class="w-3.5 h-3.5 mr-2 text-gray-500 dark:text-gray-400" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                         </svg>
                         <span class="mr-3">搜索文章 ...</span>
-                        <span class="px-2 py-[1px] flex-none text-xs border text-gray-400 rounded">Ctrl K</span>
+                        <span
+                            class="px-2 py-[1px] flex-none text-xs border text-gray-400 rounded dark:border-gray-600">Ctrl
+                            K</span>
                     </button>
                     <!-- 登录 -->
-                    <div class="text-gray-900 ml-1 mr-1 hover:text-blue-700" @click="$router.push('/login')"
-                        v-if="!isLogined">登录</div>
+                    <div class="text-gray-900 ml-1 mr-1 hover:text-blue-700 dark:text-white"
+                        @click="$router.push('/login')" v-if="!isLogined">登录</div>
 
                     <!-- 已经登录，展示用户头像 -->
                     <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" v-else
@@ -93,24 +136,24 @@
                         class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                         <li>
                             <a @click="router.push('/')"
-                                :class="[currPath == '/' ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900']"
-                                class="block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:bg-transparent md:p-0 md:dark:text-sky-500"
+                                :class="[currPath == '/' ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900 dark:text-white']"
+                                class="cursor-pointer block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:bg-transparent md:p-0 dark:hover:bg-gray-700 md:dark:hover:bg-transparent" 
                                 aria-current="page">首页</a>
                         </li>
                         <li>
                             <a @click="router.push('/category/list')"
-                                :class="[currPath.startsWith('/category') ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900']"
-                                class="block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:p-0 md:dark:hover:text-sky-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">分类</a>
+                                :class="[currPath.startsWith('/category') ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900 dark:text-white']"
+                                class="cursor-pointer block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:p-0 md:dark:hover:text-sky-500  dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">分类</a>
                         </li>
                         <li>
                             <a @click="router.push('/tag/list')"
-                                :class="[currPath.startsWith('/tag') ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900']"
-                                class="block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:p-0 dark:text-white md:dark:hover:text-sky-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">标签</a>
+                                :class="[currPath.startsWith('/tag') ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900 dark:text-white']"
+                                class="cursor-pointer block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:p-0 md:dark:hover:text-sky-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">标签</a>
                         </li>
                         <li>
                             <a @click="router.push('/archive/list')"
-                                :class="[currPath == '/archive/list' ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900']"
-                                class="block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:p-0 dark:text-white md:dark:hover:text-sky-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">归档</a>
+                                :class="[currPath == '/archive/list' ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900 dark:text-white']"
+                                class="cursor-pointer block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:p-0 md:dark:hover:text-sky-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">归档</a>
                         </li>
                     </ul>
                 </div>
@@ -203,18 +246,18 @@
                         <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                             共搜索到 {{ total }} 篇相关文章
                         </p>
-                        <ol class="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
+                        <ol class="mt-3 divide-y divider-gray-200 dark:divide-gray-600">
                             <li v-for="(article, index) in searchArticles" :key="index">
-                                <a @click="jumpToArticleDetailPage(article.id)"
-                                    class="items-center cursor-pointer block p-3 sm:flex hover:bg-gray-100 hover:rounded-lg dark:hover:bg-gray-700">
+                                <a @click="jumpToArticleDetailPage(article.id)" class="items-center cursor-pointer block p-3 sm:flex hover:bg-gray-100 hover:rounded-lg 
+                                    dark:hover:bg-gray-600">
                                     <img class="w-24 h-full mb-3 mr-3 rounded-lg sm:mb-0" :src="article.cover">
                                     <div class="text-gray-600 dark:text-gray-400">
-                                        <h2 class="text-base font-normal text-gray-900" v-html="article.title"></h2>
+                                        <h2 class="text-base font-normal text-gray-900 dark:text-white"
+                                            v-html="article.title"></h2>
                                         <span
                                             class="inline-flex items-center text-xs font-normal text-gray-500 dark:text-gray-400">
-                                            <svg class="inline w-2.5 h-2.5 mr-2 text-gray-400 dark:text-white"
-                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 20 20">
+                                            <svg class="inline w-2.5 h-2.5 mr-2 text-gray-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                                 <path stroke="currentColor" stroke-linecap="round"
                                                     stroke-linejoin="round" stroke-width="2"
                                                     d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z">
@@ -224,10 +267,13 @@
                                 </a>
                             </li>
                         </ol>
+
+
                         <!-- 分页 -->
                         <div class="flex mt-7">
-                            <a v-if="current > 1" @click="prePage"
-                                class="flex items-center justify-center px-3 h-8 me-3 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <a v-if="current > 1" @click="prePage" class="flex items-center justify-center px-3 h-8 me-3 text-xs font-medium text-gray-500 border 
+                                border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-700 
+                                dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                 <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -235,8 +281,9 @@
                                 </svg>
                             </a>
 
-                            <a v-if="current < pages" @click="nextPage"
-                                class="flex ml-auto items-center justify-center px-3 h-8 text-xs font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <a v-if="current < pages" @click="nextPage" class="flex ml-auto items-center justify-center px-3 h-8 text-xs font-medium text-gray-500 
+                                border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:border-gray-600 
+                             dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                 <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -1162,20 +1209,19 @@
                                 </g>
                             </g>
                         </svg>
-                        <p class="text-gray-600 text-sm">我这知识啊，都学杂了~</p>
+                        <p class="text-gray-600 text-sm dark:text-gray-400">我这知识啊，都学杂了~</p>
                     </div>
                 </div>
                 <!-- Modal footer -->
-                <div class="p-4 md:p-5 border-t text-xs flex items-center text-gray-400">
+                <div class="p-4 md:p-5 border-t text-xs flex items-center text-gray-400 dark:border-gray-600">
                     <!-- Esc 退出提示 -->
-                    <span class="px-2 py-[1px] flex-none border rounded">Esc</span>
+                    <span class="px-2 py-[1px] flex-none border rounded dark:border-gray-600">Esc</span>
                     <span class="text-gray-400 ml-2">关闭</span>
 
                     <!-- 底层技术介绍 -->
                     <span class="ml-auto">基于 <a href="https://lucene.apache.org/" target="_blank"
                             class="underline">Apache Lucene</a> 全文检索引擎开发</span>
                 </div>
-
             </div>
         </div>
     </div>
@@ -1192,6 +1238,8 @@ import { useRouter, useRoute } from 'vue-router';
 import { showMessage } from '@/composables/util';
 import { Modal } from 'flowbite'
 import { getArticleSearchPageList } from '@/api/frontend/search';
+import { useDark, useToggle } from '@vueuse/core'
+
 
 // 初始化 flowbit 相关组件
 const searchModal = ref(null)
@@ -1225,6 +1273,10 @@ const searchWord = ref('')
 
 // 搜索 Loading
 const searchLoading = ref(false)
+
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
+
 
 // 侦听属性，监听searchWord的变化
 watch(searchWord, (newText, oldText) => {
@@ -1341,3 +1393,81 @@ const jumpToArticleDetailPage = (articleId) => {
 }
 
 </script>
+
+<style scoped>
+.vt-switch {
+    --vt-c-divider-light-1: rgba(60, 60, 60, .29);
+    --vt-c-divider: var(--vt-c-divider-light-1);
+    --vt-c-white-mute: #f1f1f1;
+    --vt-c-bg-mute: var(--vt-c-white-mute);
+    position: relative;
+    border-radius: 11px;
+    display: block;
+    width: 40px;
+    height: 22px;
+    flex-shrink: 0;
+    border: 1px solid var(--vt-c-divider);
+    background-color: var(--vt-c-bg-mute);
+    transition: border-color .25s, background-color .25s;
+}
+
+.dark .vt-switch {
+    --vt-c-white-mute: #f1f1f1;
+    background-color: #2f2f2f;
+    transition: border-color .25s, background-color .25s;
+}
+
+.vt-switch-check {
+    --vt-c-white: #ffffff;
+    --vt-shadow-1: 0 1px 2px rgba(0, 0, 0, .04), 0 1px 2px rgba(0, 0, 0, .06);
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--vt-c-white);
+    box-shadow: var(--vt-shadow-1);
+    transition: background-color .25s, transform .25s;
+}
+
+.dark .vt-switch-appearance .vt-switch-check {
+    transform: translate(18px);
+}
+
+.dark .vt-switch-check {
+    --vt-c-black: #1a1a1a;
+    background-color: var(--vt-c-black);
+}
+
+.vt-switch-icon {
+    position: relative;
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.vt-switch-icon svg {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 12px;
+    height: 12px;
+    fill: rgba(60, 60, 60, .7);
+}
+
+.dark .vt-switch-icon svg {
+    fill: rgba(255, 255, 255, .87);
+    transition: opacity .25s;
+}
+
+.dark .vt-switch-appearance-moon {
+    opacity: 1;
+}
+
+.vt-switch-appearance-sun {
+    opacity: 1;
+}
+</style>

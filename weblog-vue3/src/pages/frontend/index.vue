@@ -20,13 +20,13 @@
                                 <!-- 标签 -->
                                 <div class="mb-3">
                                     <span v-for="(tag, tagIndex) in article.tags" :key="tagIndex"
-                                        class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                        class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:hover:bg-green-950 dark:text-green-300">
                                         {{ tag.name }}
                                     </span>
                                 </div>
                                 <a @click="goArticleDetailPage(article.id)" class="cursor-pointer">
                                     <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        <span class="hover:border-gray-600 hover:border-b-2">{{ article.title }}</span>
+                                        <span class="hover:border-gray-600 hover:border-b-2 dark:hover:border-gray-400">{{article.title }}</span>
                                     </h2>
                                 </a>
                                 <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ article.summary }}

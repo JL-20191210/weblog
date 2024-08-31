@@ -16,7 +16,6 @@
             <span
                 class="text-sm text-gray-500 dark:text-gray-400">{{ blogSettingsStore.blogSettings.introduction }}</span>
             <!-- 第三方平台主页跳转（如 GitHub 等） -->
-            <!-- 第三方平台主页跳转（如 GitHub 等） -->
             <div class="flex justify-center  gap-2">
                 <!-- GitHub -->
                 <svg v-if="blogSettingsStore.blogSettings.githubHomepage" t="1698029949662"
