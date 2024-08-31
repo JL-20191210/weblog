@@ -7,40 +7,61 @@
         <div class="grid grid-cols-4 gap-7">
             <!-- 左边栏，占用 3 列 -->
             <div class="col-span-4 md:col-span-3 mb-3">
-                <!-- 分类文章列表 -->
-                <!-- 分类文章列表 -->
-                <div class="p-5 mb-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
-                    <h1 class="flex items-center text-lg font-semibold text-gray-900 dark:text-white">
+                <!-- 标签 -->
+                <div v-if="tags && tags.length > 0"
+                    class="w-full p-5 pb-7 mb-3 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+                    <!-- 标签标题 -->
+                    <h2 class="flex items-center mb-5 font-bold text-gray-900 uppercase dark:text-white">
                         <!-- 标签图标 -->
-                        <svg t="1721745799332" class="icon w-5 h-5 mr-2" viewBox="0 0 1024 1024" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" p-id="1769" width="200" height="200">
+                        <svg t="1698980289658" class="icon w-[1.2rem] h-[1.2rem] mr-2" viewBox="0 0 1024 1024"
+                            version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13858" width="200" height="200">
                             <path
-                                d="M523.654 923.72c-15.883-0.001-30.761-6.136-41.893-17.273L121.813 546.259c-23.291-23.305-22.946-61.57 0.766-85.301l301.732-301.927c21.521-21.533 50.003-33.499 80.199-33.691l340.867-2.172c15.945 0 30.866 6.178 42.014 17.397 11.16 11.231 17.25 26.221 17.147 42.208l-2.17 340.697c-0.192 30.228-12.153 58.736-33.679 80.276L566.957 905.674c-11.628 11.638-27.006 18.046-43.301 18.046h-0.002z"
-                                fill="#FFFFFF" p-id="1770"></path>
+                                d="M646.4512 627.5584m-298.1888 0a298.1888 298.1888 0 1 0 596.3776 0 298.1888 298.1888 0 1 0-596.3776 0Z"
+                                fill="#C7ACEF" p-id="13859"></path>
                             <path
-                                d="M845.378 148.167c9.236 0 17.858 3.558 24.278 10.02 6.433 6.474 9.943 15.149 9.884 24.427l-2.171 340.698c-0.148 23.27-9.757 46.146-26.362 62.763l-301.736 301.93c-6.905 6.91-16.003 10.715-25.618 10.715-9.201 0-17.797-3.532-24.207-9.945l-359.95-360.188c-13.552-13.561-13.208-35.972 0.766-49.957l301.733-301.927c16.597-16.607 39.441-26.216 62.675-26.364l340.46-2.171 0.248-0.001m0-50l-0.552 0.002-340.475 2.171c-36.559 0.233-71.708 14.988-97.723 41.018L104.895 443.287c-33.503 33.529-33.848 87.541-0.765 120.645l359.95 360.187c16.4 16.411 37.941 24.602 59.574 24.602 22 0 44.095-8.468 60.987-25.374l301.733-301.928c26.015-26.032 40.762-61.205 40.994-97.789l2.171-340.697c0.299-46.929-37.333-84.766-84.161-84.766z"
-                                fill="#1A1A1A" p-id="1771"></path>
+                                d="M467.6096 962.5088c-34.4064 0-68.7616-13.1072-94.976-39.2704l-276.48-276.48c-52.3776-52.3776-52.3776-137.5744 0-189.9008L465.4592 87.552a105.216 105.216 0 0 1 76.8512-30.6176l308.6336 8.3456c55.3472 1.4848 100.096 46.0288 101.7856 101.376l9.5744 310.1696c0.8704 28.7744-10.2912 56.9344-30.6176 77.2608l-369.2032 369.2032c-26.112 26.112-60.4672 39.2192-94.8736 39.2192z m71.8848-844.1856c-11.4176 0-22.4768 4.5568-30.5664 12.6464L139.6224 500.2752c-28.416 28.416-28.416 74.6496 0 103.0144l276.48 276.48c28.416 28.416 74.6496 28.416 103.0144 0l369.2032-369.2032a43.4176 43.4176 0 0 0 12.6464-31.8976l-9.5744-310.1696c-0.7168-22.8864-19.2-41.2672-42.0352-41.8816l-308.6336-8.3456c-0.4608 0.0512-0.8192 0.0512-1.2288 0.0512z"
+                                fill="#4F4F4F" p-id="13860"></path>
                             <path
-                                d="M630.465 212.491c95.862 0 173.57 77.708 173.57 173.572 0 95.858-77.708 173.572-173.57 173.572-95.86 0-173.572-77.713-173.572-173.572 0.001-95.864 77.712-173.572 173.572-173.572z"
-                                fill="#FFCD36" p-id="1772"></path>
+                                d="M676.4032 445.5424c-62.208 0-112.8448-50.6368-112.8448-112.8448s50.6368-112.8448 112.8448-112.8448c62.208 0 112.8448 50.6368 112.8448 112.8448s-50.6368 112.8448-112.8448 112.8448z m0-164.1984c-28.3648 0-51.4048 23.04-51.4048 51.4048s23.04 51.4048 51.4048 51.4048c28.3648 0 51.4048-23.04 51.4048-51.4048s-23.0912-51.4048-51.4048-51.4048z"
+                                fill="#4F4F4F" p-id="13861"></path>
                         </svg>
-                        {{ tagName }}
-                    </h1>
-                    <ol v-if="articles && articles.length > 0"
-                        class="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
+                        标签
+                        <span class="ml-2 text-gray-600 font-normal dark:text-gray-300">( {{ tags.length }} )</span>
+
+                    </h2>
+
+                    <!-- 标签列表 -->
+                    <div class="flex flex-wrap gap-3">
+                        <a v-for="(tag, index) in tags" :key="index" @click="goTagArticleListPage(tag.id, tag.name)"
+                            :class="[route.query.name == tag.name ? 'bg-sky-100 hover:bg-sky-200' : 'hover:bg-gray-100']"
+                            class="cursor-pointer inline-flex items-center px-3.5 py-1.5 text-xs font-medium text-center border rounded-[12px]
+             focus:ring-4 focus:outline-none focus:ring-gray-300 
+            dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-800 
+            dark:border-gray-700 dark:hover:text-white">
+                            {{ tag.name }}
+                            <span
+                                class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold text-sky-800 bg-sky-200 rounded-full">
+                                {{ tag.articlesTotal }}
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 标签文章列表 -->
+                <div class="p-5 mb-4 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+                    <ol v-if="articles && articles.length > 0" class="divide-y divider-gray-200 dark:divide-gray-700">
                         <li v-for="(article, index) in articles" :key="index">
                             <a @click="goArticleDetailPage(article.id)"
-                                class="items-center cursor-pointer block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700">
+                                class="cursor-pointer items-center block p-3 sm:flex hover:bg-gray-100 hover:rounded-lg dark:hover:bg-gray-700">
                                 <img class="w-24 h-12 mb-3 mr-3 rounded-lg sm:mb-0" :src="article.cover" />
                                 <div class="text-gray-600 dark:text-gray-400">
-                                    <h2 class="text-base font-normal text-gray-900">
+                                    <h2 class="text-base font-normal text-gray-900 dark:text-white">
                                         {{ article.title }}
                                     </h2>
                                     <span
                                         class="inline-flex items-center text-xs font-normal text-gray-500 dark:text-gray-400">
-                                        <svg class="inline w-2.5 h-2.5 mr-2 text-gray-400 dark:text-white"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 20 20">
+                                        <svg class="inline w-2.5 h-2.5 mr-2 text-gray-400" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                                 stroke-width="2"
                                                 d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
@@ -298,7 +319,7 @@ import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue
 import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getTagArticlePageList } from '@/api/frontend/tag'
+import { getTagArticlePageList, getTagList } from '@/api/frontend/tag'
 
 const route = useRoute()
 
@@ -308,6 +329,20 @@ const tagName = ref(route.query.name)
 const tagID = ref(route.query.id)
 // 文章集合
 const articles = ref([])
+
+// 所有标签
+const tags = ref([])
+getTagList({}).then((res) => {
+    if (res.success) {
+        tags.value = res.data
+    }
+})
+
+// 跳转标签文章列表页
+const goTagArticleListPage = (id, name) => {
+    // 跳转时通过 query 携带参数（标签 ID、标签名称）
+    router.push({ path: '/tag/article/list', query: { id, name } })
+}
 
 // 监听路由
 watch(route, (newRoute, oldRoute) => {
