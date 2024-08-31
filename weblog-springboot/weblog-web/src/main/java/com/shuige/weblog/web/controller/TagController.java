@@ -3,6 +3,7 @@ package com.shuige.weblog.web.controller;
 import com.shuige.weblog.common.aspect.ApiOperationLog;
 import com.shuige.weblog.common.utils.Response;
 import com.shuige.weblog.web.model.vo.tag.FindTagArticlePageListReqVO;
+import com.shuige.weblog.web.model.vo.tag.FindTagListReqVO;
 import com.shuige.weblog.web.service.TagService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,8 +29,8 @@ public class TagController {
     @PostMapping("/list")
     @ApiOperation(value = "前台获取标签列表")
     @ApiOperationLog(description = "前台获取标签列表")
-    public Response findTagList() {
-        return tagService.findTagList();
+    public Response findTagList(@Validated @RequestBody FindTagListReqVO findTagListReqVO) {
+        return tagService.findTagList(findTagListReqVO);
     }
 
     @PostMapping("/article/list")

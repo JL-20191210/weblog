@@ -2,6 +2,7 @@ package com.shuige.weblog.web.service;
 
 import com.shuige.weblog.common.utils.Response;
 import com.shuige.weblog.web.model.vo.tag.FindTagArticlePageListReqVO;
+import com.shuige.weblog.web.model.vo.tag.FindTagListReqVO;
 
 /**
  * @author felix
@@ -12,7 +13,7 @@ public interface TagService {
      * 查询标签列表
      * @return
      */
-    Response findTagList();
+    Response findTagList(FindTagListReqVO findTagListReqVO);
 
     /**
      * 查询标签下文章分页数据

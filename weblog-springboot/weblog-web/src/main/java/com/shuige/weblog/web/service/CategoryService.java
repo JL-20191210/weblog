@@ -2,6 +2,7 @@ package com.shuige.weblog.web.service;
 
 import com.shuige.weblog.common.utils.Response;
 import com.shuige.weblog.web.model.vo.category.FindCategoryArticlePageListReqVO;
+import com.shuige.weblog.web.model.vo.category.FindCategoryListReqVO;
 
 /**
  * @author felix
@@ -13,7 +14,7 @@ public interface CategoryService {
      * 查询分类列表
      * @return
      */
-    Response findCategoryList();
+    Response findCategoryList(FindCategoryListReqVO findCategoryListReqVO);
 
     Response findCategoryArticlePageList(FindCategoryArticlePageListReqVO findCategoryArticlePageListReqVO);
 }

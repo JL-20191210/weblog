@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.shuige.weblog.common.domain.dos.CategoryDO;
 import com.shuige.weblog.common.domain.dos.TagDO;
 
 import java.time.LocalDate;
@@ -46,5 +47,16 @@ public interface TagMapper extends BaseMapper<TagDO> {
     default List<TagDO> selectByIds(List<Long> tagIds){
         return selectList(Wrappers.<TagDO>lambdaQuery()
                 .in(TagDO::getId,tagIds));
+    }
+
+    /**
+     * 查询时指定数量
+     * @param limit
+     * @return
+     */
+    default List<TagDO> selectByLimit(Long limit) {
+        return selectList(Wrappers.<TagDO>lambdaQuery()
+                .orderByDesc(TagDO::getArticlesTotal) // 根据文章总数降序
+                .last(String.format("LIMIT %d", limit))); // 查询指定数量
     }
 }
