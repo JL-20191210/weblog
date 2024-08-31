@@ -1,6 +1,7 @@
 package com.shuige.weblog.admin.event.subscriber;
 
 import com.shuige.weblog.admin.event.PublishArticleEvent;
+import com.shuige.weblog.admin.service.AdminStatisticsService;
 import com.shuige.weblog.common.constant.Constants;
 import com.shuige.weblog.common.domain.dos.ArticleContentDO;
 import com.shuige.weblog.common.domain.dos.ArticleDO;
@@ -27,6 +28,8 @@ public class PublishArticleSubscriber implements ApplicationListener<PublishArti
     private ArticleMapper articleMapper;
     @Autowired
     private ArticleContentMapper articleContentMapper;
+    @Autowired
+    private AdminStatisticsService statisticsService;
 
     @Override
     @Async("threadPoolTaskExecutor")
@@ -58,5 +61,10 @@ public class PublishArticleSubscriber implements ApplicationListener<PublishArti
         long count = luceneHelper.addDocument(ArticleIndex.NAME, document);
 
         log.info("==> 添加文章对应 Lucene 文档结束，articleId: {}，受影响行数: {}", articleId, count);
+
+        // 重新统计各分类下文章总数
+        statisticsService.statisticsCategoryArticleTotal();
+        log.info("==> 重新统计各分类下文章总数");
+
     }
 }
