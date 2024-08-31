@@ -5,9 +5,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.collect.Maps;
 import com.shuige.weblog.admin.service.AdminStatisticsService;
 import com.shuige.weblog.common.domain.dos.ArticleCategoryRelDO;
+import com.shuige.weblog.common.domain.dos.ArticleTagRelDO;
 import com.shuige.weblog.common.domain.dos.CategoryDO;
+import com.shuige.weblog.common.domain.dos.TagDO;
 import com.shuige.weblog.common.domain.mapper.ArticleCategoryRelMapper;
+import com.shuige.weblog.common.domain.mapper.ArticleTagRelMapper;
 import com.shuige.weblog.common.domain.mapper.CategoryMapper;
+import com.shuige.weblog.common.domain.mapper.TagMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,10 @@ public class AdminStatisticsServiceImpl implements AdminStatisticsService {
     private CategoryMapper categoryMapper;
     @Autowired
     private ArticleCategoryRelMapper articleCategoryRelMapper;
+    @Autowired
+    private TagMapper tagMapper;
+    @Autowired
+    private ArticleTagRelMapper articleTagRelMapper;
 
     @Override
     public void statisticsCategoryArticleTotal() {
@@ -56,5 +64,39 @@ public class AdminStatisticsServiceImpl implements AdminStatisticsService {
                 categoryMapper.updateById(categoryDO1);
             }
         }
+    }
+
+    @Override
+    public void statisticsTagArticleTotal() {
+        // 查询所有标签
+        List<TagDO> tagDOS = tagMapper.selectList(Wrappers.emptyWrapper());
+
+        // 查询所有文章-标签映射记录
+        List<ArticleTagRelDO> articleTagRelDOS = articleTagRelMapper.selectList(Wrappers.emptyWrapper());
+
+        // 按所需标签ID进行分组
+        Map<Long,List<ArticleTagRelDO>> tagIdAndArticleTagRelDOMap = Maps.newHashMap();
+
+        if(CollectionUtils.isNotEmpty(articleTagRelDOS)){
+            tagIdAndArticleTagRelDOMap = articleTagRelDOS.stream()
+                    .collect(Collectors.groupingBy(ArticleTagRelDO::getTagId));
+        }
+
+        if(CollectionUtils.isNotEmpty(tagDOS)){
+            for(TagDO tagDO : tagDOS){
+                Long tagId = tagDO.getId();
+
+                List<ArticleTagRelDO> articleTagRelDOSList = tagIdAndArticleTagRelDOMap.get(tagId);
+
+                int articleTotal = CollectionUtils.isEmpty(articleTagRelDOSList) ? 0 : articleTagRelDOSList.size();
+
+                TagDO tagDO1 = TagDO.builder()
+                        .id(tagId)
+                        .articlesTotal(articleTotal)
+                        .build();
+                tagMapper.updateById(tagDO1);
+            }
+        }
+
     }
 }
