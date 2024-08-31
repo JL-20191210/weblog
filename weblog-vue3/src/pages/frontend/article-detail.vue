@@ -2,7 +2,7 @@
     <Header></Header>
 
     <!-- 文章标题、标签、Meta 信息 -->
-    <div class="bg-white">
+    <div class="bg-white dark:bg-gray-900">
         <div class="max-w-screen-xl flex flex-col flex-wrap mx-auto px-4 md:px-6 pb-14 pt-10">
             <!-- 标签集合 -->
             <div v-if="article.tags && article.tags.length > 0" class="mb-5">
@@ -13,10 +13,8 @@
                     # {{ tag.name }}
                 </span>
             </div>
-
-
             <!-- 文章标题 -->
-            <h1 class="font-bold text-4xl md:text-5xl mb-8">{{ article.title }}</h1>
+            <h1 class="font-bold text-4xl md:text-5xl mb-8 dark:text-white">{{ article.title }}</h1>
 
             <!-- Meta 信息 -->
             <div class="flex gap-3 md:gap-6 text-gray-400 items-center text-sm">
@@ -129,7 +127,10 @@
                 <div
                     class="w-full p-5 mb-3 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
                     <!-- 正文 -->
-                    <div ref="articleContentRef" class="mt-5 article-content" v-viewer v-html="article.content"></div>
+                    <div :class="{ 'dark': isDark }">
+                        <div ref="articleContentRef" class="mt-5 article-content" v-viewer v-html="article.content">
+                        </div>
+                    </div>
                     <!-- 标签集合 -->
                     <div v-if="article.tags && article.tags.length > 0" class="mt-5">
                         <span @click="goTagArticleListPage(tag.id, tag.name)" v-for="(tag, index) in article.tags"
@@ -215,6 +216,9 @@ import hljs from 'highlight.js'
 // 代码高亮样式
 import 'highlight.js/styles/tokyo-night-dark.css'
 import { initTooltips } from 'flowbite'
+import { useDark } from '@vueuse/core'
+
+const isDark = useDark()
 
 
 const route = useRoute()
@@ -629,5 +633,100 @@ const goTagArticleListPage = (id, name) => {
     --copied-icon: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' height='20' width='20' stroke='rgba(128,128,128,1)' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4'/%3E%3C/svg%3E");
     -webkit-mask-image: var(--copied-icon);
     mask-image: var(--copied-icon);
+}
+
+/* h1, h2, h3, h4, h5, h6 标题样式 */
+::v-deep(.dark .article-content h2) {
+    --tw-text-opacity: 1;
+    color: rgb(226 232 240/var(--tw-text-opacity));
+    border-bottom: 1px solid;
+    border-color: rgb(55 65 81 / 1);
+}
+
+::v-deep(.dark .article-content h3) {
+    --tw-text-opacity: 1;
+    color: rgb(226 232 240/var(--tw-text-opacity));
+}
+
+::v-deep(.dark .article-content h4) {
+    --tw-text-opacity: 1;
+    color: rgb(226 232 240/var(--tw-text-opacity));
+}
+
+::v-deep(.dark .article-content h5) {
+    --tw-text-opacity: 1;
+    color: rgb(226 232 240/var(--tw-text-opacity));
+}
+
+::v-deep(.dark .article-content h6) {
+    --tw-text-opacity: 1;
+    color: rgb(226 232 240/var(--tw-text-opacity));
+}
+
+/* p 段落样式 */
+::v-deep(.dark .article-content p) {
+    color: #9e9e9e;
+}
+
+/* blockquote 引用样式 */
+::v-deep(.dark .article-content blockquote) {
+    quotes: none;
+    --tw-bg-opacity: 1;
+    background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+    border-left: 2.3px solid #555;
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 20px;
+    padding: 0.25rem 0 0.25rem 1rem;
+}
+
+/* ul 样式 */
+::v-deep(.dark .article-content ul) {
+    padding-left: 2rem;
+    color: #9e9e9e;
+}
+
+/* ol 样式 */
+::v-deep(.dark .article-content ol) {
+    color: #9e9e9e;
+}
+
+/* code 样式 */
+::v-deep(.dark .article-content code:not(pre code)) {
+    padding: 2px 4px;
+    margin: 0 2px;
+    font-size: .85em;
+    border-radius: 5px;
+    color: #abb2bf;
+    background: #333;
+    /* background-color: rgba(27, 31, 35, 0.05); */
+    font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
+}
+
+/* 表格样式 */
+::v-deep(.dark table tr) {
+    background-color: rgb(31 41 55 / 1);
+}
+
+::v-deep(.dark table) {
+    color: #9e9e9e;
+}
+
+::v-deep(.dark table th) {
+    border: 1px solid #394048;
+}
+
+::v-deep(.dark table td) {
+    border: 1px solid #394048;
+}
+
+::v-deep(.dark table tr:nth-child(2n)) {
+    background-color: rgb(21 41 55 / 1);
+}
+
+/* hr 横线 */
+::v-deep(.dark hr) {
+    --tw-border-opacity: 1;
+    border-color: rgb(55 65 81 / var(--tw-border-opacity));
 }
 </style>

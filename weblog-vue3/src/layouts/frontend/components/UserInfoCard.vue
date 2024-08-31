@@ -20,10 +20,9 @@
                 介绍语
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
-
             <!-- 文章数量、分类数量、标签数量、总访问量 -->
             <!-- flex 布局，justify-center 水平居中，gap-5 设置 flex 内子元素的间距 -->
-            <div class="flex justify-center gap-5 mb-2">
+            <div class="flex justify-center gap-5 mb-2 dark:text-gray-400">
                 <!-- flex 布局，items-center 垂直居中，flex-col 设置子元素上下排列，hover: 用于设置鼠标移动到上面的样式，字体颜色、scale-110 放大效果，cursor-pointer 指定鼠标移动到上面为小手指样式 -->
                 <div class="flex items-center flex-col gap-1 hover:text-blue-700 hover:scale-110 cursor-pointer">
                     <!-- 字体大小为 text-lg , font-bold 字体加粗 -->

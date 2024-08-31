@@ -16,19 +16,19 @@
             </svg>
             文章目录
         </h2>
-        <div class="toc-wrapper">
+        <div class="toc-wrapper " :class="[isDark ? 'dark' : '']">
             <ul class="toc">
                 <!-- 二级标题 -->
                 <li v-for="(h2, index) in titles" :key="index">
                     <span @click="scrollToView(h2.offsetTop)" class="pl-5 cursor-pointer hover:text-sky-600"
                         :class="[h2.index == activeHeadingIndex ? 'active py-1 text-sky-600 border-l-2 border-sky-600 font-bold' : 'text-gray-500 font-normal']">{{
-                        h2.text }}</span>
+                            h2.text }}</span>
                     <!-- 三级标题 -->
                     <ul v-if="h2.children && h2.children.length > 0">
                         <li v-for="(h3, index2) in h2.children" :key="index2">
                             <span @click="scrollToView(h3.offsetTop)" class="pl-10 cursor-pointer hover:text-sky-600"
                                 :class="[h3.index == activeHeadingIndex ? 'active py-1 text-sky-600 border-l-2 border-sky-600 font-bold' : 'text-gray-500 font-normal']">{{
-                                h3.text }}</span>
+                                    h3.text }}</span>
                         </li>
                     </ul>
                 </li>
@@ -39,6 +39,9 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useDark } from '@vueuse/core'
+
+const isDark = useDark()
 
 // 响应式的目录数据
 const titles = ref([])
@@ -182,5 +185,28 @@ function initTocData(container) {
     z-index: -1;
     width: 2px;
     background: #eaecef;
+}
+
+::v-deep(.dark .toc:before) {
+    content: " ";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    width: 2px;
+    background: #30363d;
+}
+
+::v-deep(.dark .toc li span) {
+    color: #9e9e9e;
+}
+
+::v-deep(.dark .toc li .active) {
+    color: rgb(2 132 199 / 1);
+}
+
+::v-deep(.dark .toc li span:hover) {
+    color: rgb(2 132 199 / 1);
 }
 </style>
