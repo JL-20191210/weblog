@@ -29,23 +29,6 @@
                     </el-icon>新增
                 </el-button>
             </div>
-
-            <!-- <el-dialog v-model="dialogVisible" title="添加文章分类" width="40%" :draggable="true" :close-on-click-modal="false"
-                :close-on-press-escape="false">
-                <el-form ref="formRef" :model="form" :rules="rules">
-                    <el-form-item label="分类名称" prop="name" label-width="80px">
-                        <el-input size="large" v-model="form.name" placeholder="请输入分类名称" clearable maxlength="20" show-word-limit />
-                    </el-form-item>
-                </el-form>
-                <template #footer>
-                    <div class="dialog-footer">
-                        <el-button @click="dialogVisible = false">取消</el-button>
-                        <el-button type="primary" @click="onSubmit">
-                            提交
-                        </el-button>
-                    </div>
-                </template>
-            </el-dialog> -->
             <FormDialog ref="formDialogRef" title="添加文章分类" destroyOnclose @submit="onSubmit">
                 <el-form ref="formRef" :model="form" :rules="rules">
                     <el-form-item label="分类名称" prop="name" label-width="80px">
@@ -54,19 +37,20 @@
                 </el-form>
             </FormDialog>
 
-            <!-- 分页列表 -->
+			<!-- 分页列表 -->
             <el-table :data="tableData" border stripe style="width: 100%" v-loading="tableLoading">
                 <el-table-column prop="name" label="分类名称" width="180" />
+                <el-table-column prop="articlesTotal" label="文章数" width="100" />
                 <el-table-column prop="createTime" label="创建时间" width="180" />
-                <el-table-column label="操作">
+                <el-table-column label="操作" >
                     <template #default="scope">
-                        <el-button type="danger" size="small" @click="deleteCategorySubmit(scope.row)">
-                            <el-icon class="mr-1">
-                                <Delete />
-                            </el-icon>
-                            删除
-                        </el-button>
-                    </template>
+                    <el-button type="danger" size="small" @click="deleteCategorySubmit(scope.row)">
+                        <el-icon class="mr-1">
+                            <Delete />
+                        </el-icon>
+                        删除
+                    </el-button>
+                </template>
                 </el-table-column>
             </el-table>
         </el-card>

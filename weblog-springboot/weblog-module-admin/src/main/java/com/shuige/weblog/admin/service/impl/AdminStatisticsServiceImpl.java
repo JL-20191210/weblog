@@ -39,7 +39,7 @@ public class AdminStatisticsServiceImpl implements AdminStatisticsService {
         if(CollectionUtils.isNotEmpty(articleCategoryRelDOS)){
             categoryIdAndArticleCategoryRelDOMap = articleCategoryRelDOS
                     .stream()
-                    .collect(Collectors.groupingBy(ArticleCategoryRelDO::getArticleId));
+                    .collect(Collectors.groupingBy(ArticleCategoryRelDO::getCategoryId));
         }
 
         if(CollectionUtils.isNotEmpty(categoryDOS)){
