@@ -154,6 +154,7 @@ public class AdminArticleServiceImpl implements AdminArticleService {
                             .cover(articleDO.getCover())
                             .createTime(articleDO.getCreateTime())
                             .title(articleDO.getTitle())
+                            .isTop(articleDO.getWeight()>0)
                             .build())
                     .collect(Collectors.toList());
         }
@@ -317,5 +318,36 @@ public class AdminArticleServiceImpl implements AdminArticleService {
                 });
             }
         }
+    }
+
+    /**
+     * 更新文章是否置顶
+     *
+     * @param updateArticleIsTopReqVO
+     * @return
+     */
+    @Override
+    public Response updateArticleIsTop(UpdateArticleIsTopReqVO updateArticleIsTopReqVO) {
+        Long articleId = updateArticleIsTopReqVO.getId();
+        Boolean isTop = updateArticleIsTopReqVO.getIsTop();
+
+        // 默认权重为 0
+        Integer weight = 0;
+        // 若设置为置顶
+        if (isTop) {
+            // 查询出表中最大的权重值
+            ArticleDO articleDO = articleMapper.selectMaxWeight();
+            Integer maxWeight = articleDO.getWeight();
+            // 最大权重值加一
+            weight = maxWeight + 1;
+        }
+
+        // 更新该篇文章的权重值
+        articleMapper.updateById(ArticleDO.builder()
+                .id(articleId)
+                .weight(weight)
+                .build());
+
+        return Response.success();
     }
 }

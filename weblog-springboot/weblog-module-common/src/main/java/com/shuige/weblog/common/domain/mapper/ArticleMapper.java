@@ -37,6 +37,7 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
                 .like(StringUtils.isNotBlank(title),ArticleDO::getTitle,title)
                 .ge(Objects.nonNull(startDate),ArticleDO::getCreateTime,startDate)
                 .le(Objects.nonNull(endDate),ArticleDO::getCreateTime,endDate)
+                .orderByDesc(ArticleDO::getWeight) // 按权重倒序
                 .orderByDesc(ArticleDO::getCreateTime);
 
         return selectPage(page,wrapper);
@@ -111,4 +112,14 @@ public interface ArticleMapper extends BaseMapper<ArticleDO> {
             "WHERE create_time >= #{startDate} AND create_time < #{endDate} \n" +
             "GROUP BY DATE(create_time) \n")
     List<ArticlePublishCountDO> selectDateArticlePublishCount(LocalDate startDate,LocalDate endDate);
+
+    /**
+     * 查询最大权重值记录
+     * @return
+     */
+    default ArticleDO selectMaxWeight() {
+        return selectOne(Wrappers.<ArticleDO>lambdaQuery()
+                .orderByDesc(ArticleDO::getWeight) // 按权重值降序排列
+                .last("LIMIT 1")); // 仅查询出一条
+    }
 }
