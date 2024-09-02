@@ -1,9 +1,6 @@
 package com.shuige.weblog.admin.controller;
 
-import com.shuige.weblog.admin.model.vo.wiki.AddWikiReqVO;
-import com.shuige.weblog.admin.model.vo.wiki.DeleteWikiReqVO;
-import com.shuige.weblog.admin.model.vo.wiki.FindWikiPageListReqVO;
-import com.shuige.weblog.admin.model.vo.wiki.UpdateWikiIsTopReqVO;
+import com.shuige.weblog.admin.model.vo.wiki.*;
 import com.shuige.weblog.admin.service.AdminWikiService;
 import com.shuige.weblog.common.aspect.ApiOperationLog;
 import com.shuige.weblog.common.utils.Response;
@@ -55,5 +52,34 @@ public class AdminWikiController {
     @ApiOperationLog(description = "更新知识库置顶状态")
     public Response updateWikiIsTop(@RequestBody @Validated UpdateWikiIsTopReqVO updateWikiIsTopReqVO) {
         return wikiService.updateWikiIsTop(updateWikiIsTopReqVO);
+    }
+
+    @PostMapping("/isPublish/update")
+    @ApiOperation(value = "更新知识库发布状态")
+    @ApiOperationLog(description = "更新知识库发布状态")
+    public Response updateWikiIsPublish(@RequestBody @Validated UpdateWikiIsPublishReqVO updateWikiIsPublishReqVO) {
+        return wikiService.updateWikiIsPublish(updateWikiIsPublishReqVO);
+    }
+
+
+    @PostMapping("/update")
+    @ApiOperation(value = "更新知识库")
+    @ApiOperationLog(description = "更新知识库")
+    public Response updateWiki(@RequestBody @Validated UpdateWikiReqVO updateWikiReqVO) {
+        return wikiService.updateWiki(updateWikiReqVO);
+    }
+
+    @PostMapping("/catalog/list")
+    @ApiOperation(value = "查询知识库目录数据")
+    @ApiOperationLog(description = "查询知识库目录数据")
+    public Response findWikiCatalogList(@RequestBody @Validated FindWikiCatalogListReqVO findWikiCatalogListReqVO) {
+        return wikiService.findWikiCatalogList(findWikiCatalogListReqVO);
+    }
+
+    @PostMapping("/catalog/update")
+    @ApiOperation(value = "更新知识库目录")
+    @ApiOperationLog(description = "更新知识库目录")
+    public Response updateWikiCatalogs(@RequestBody @Validated UpdateWikiCatalogReqVO updateWikiCatalogsReqVO) {
+        return wikiService.updateWikiCatalogs(updateWikiCatalogsReqVO);
     }
 }
