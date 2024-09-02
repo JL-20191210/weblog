@@ -76,7 +76,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 
 const tags = ref([])
-getTagList().then((res) => {
+getTagList({}).then((res) => {
     if (res.success) {
         tags.value = res.data
     }

@@ -10,16 +10,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * @author felix
- * @date 2024/7/9 10:52
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@TableName("t_article")
-public class ArticleDO {
+@TableName("t_wiki")
+public class WikiDO {
 
     @TableId(type = IdType.AUTO)
     private Long id;
@@ -36,9 +32,7 @@ public class ArticleDO {
 
     private Boolean isDeleted;
 
-    private Long readNum;
-
     private Integer weight;
 
-    private Integer type;
+    private Boolean isPublish;
 }
