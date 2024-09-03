@@ -15,6 +15,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import CategoryList from "@/pages/frontend/category-list.vue";
 import CategoryArticleList from "@/pages/frontend/category-article-list.vue";
 import TagList from "@/pages/frontend/tag-list.vue";
+import { component } from "v-viewer";
+import AdminWikiList from '@/pages/admin/wiki-list.vue'
 
 //统一在这里声明所有路由
 const routes = [
@@ -123,6 +125,13 @@ const routes = [
                     title: "博客设置"
                 }
             },
+            {
+                path: "/admin/wiki/list",
+                component: AdminWikiList,
+                meta:{
+                    title: '知识库管理'
+                }
+            }
 
         ]
     },
