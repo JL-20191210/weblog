@@ -31,3 +31,13 @@ export function updateWiki(data) {
     return axios.post("/admin/wiki/update", data)
 }
 
+// 获取知识库目录
+export function getWikiCatalogs(id) {
+    return axios.post("/admin/wiki/catalog/list", {id})
+}
+
+// 更新知识库目录
+export function updateWikiCatalogs(data) {
+    return axios.post("/admin/wiki/catalog/update", data)
+}
+
