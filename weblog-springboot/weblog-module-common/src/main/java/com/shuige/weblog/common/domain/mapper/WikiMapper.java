@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shuige.weblog.common.domain.dos.ArticleDO;
+import com.shuige.weblog.common.domain.dos.WikiCatalogDO;
 import com.shuige.weblog.common.domain.dos.WikiDO;
+import com.shuige.weblog.common.enums.WikiCatalogLevelEnum;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -50,5 +52,16 @@ public interface WikiMapper extends BaseMapper<WikiDO> {
         return selectOne(Wrappers.<WikiDO>lambdaQuery()
                 .orderByDesc(WikiDO::getWeight)
                 .last("limit 1"));
+    }
+
+    /**
+     * 查询已发布的知识库
+     * @return
+     */
+    default List<WikiDO> selectPublished(){
+        return selectList(Wrappers.<WikiDO>lambdaQuery()
+                .eq(WikiDO::getIsPublish,1)
+                .orderByDesc(WikiDO::getWeight)
+                .orderByDesc(WikiDO::getCreateTime));
     }
 }

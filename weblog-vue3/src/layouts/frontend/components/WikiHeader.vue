@@ -1,10 +1,10 @@
 <template>
     <header class="sticky top-0 z-10">
-        <nav class="bg-white border-gray-200 border-b dark:bg-gray-900 dark:border-gray-800">
-            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <nav class="bg-white border-gray-200 border-b dark:bg-[#0d1117] dark:border-gray-800">
+            <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="/" class="flex items-center">
                     <img :src="blogSettingsStore.blogSettings.logo" class="h-8 mr-3" alt="Flowbite Logo" />
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-gray-400">
                         {{ blogSettingsStore.blogSettings.name }}</span>
                 </a>
                 <div class="flex md:order-2 items-center">
@@ -133,7 +133,7 @@
 
 
                     <ul
-                        class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                        class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white  md:dark:bg-gray-900 dark:border-gray-700">
                         <li>
                             <a @click="router.push('/')"
                                 :class="[currPath == '/' ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900 dark:text-gray-400']"
@@ -157,9 +157,10 @@
                         </li>
                         <li>
                             <a @click="router.push('/wiki/list')"
-                                :class="[currPath == '/wiki/list' ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900 dark:text-gray-400']"
-                                class="block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:p-0 md:dark:hover:text-sky-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">知识库</a>
+                                :class="[currPath.startsWith('/wiki') ? 'text-sky-600 md:border-b-2 md:border-sky-600 dark:text-sky-500 dark:md:border-sky-600' : 'text-gray-900 dark:text-gray-400']"
+                                class="block py-2 pl-3 pr-4 rounded md:rounded-none hover:bg-gray-100 md:hover:bg-transparent md:hover:text-sky-600 md:p-0 md:dark:hover:text-sky-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 dark:text-gray-400" >知识库</a>
                         </li>
+
                     </ul>
                 </div>
             </div>

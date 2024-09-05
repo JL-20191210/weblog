@@ -15,8 +15,9 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import CategoryList from "@/pages/frontend/category-list.vue";
 import CategoryArticleList from "@/pages/frontend/category-article-list.vue";
 import TagList from "@/pages/frontend/tag-list.vue";
-import { component } from "v-viewer";
 import AdminWikiList from '@/pages/admin/wiki-list.vue'
+import WikiList from '@/pages/frontend/wiki-list.vue'
+import WikiDetail from '@/pages/frontend/wiki-detail.vue'
 
 //统一在这里声明所有路由
 const routes = [
@@ -82,6 +83,20 @@ const routes = [
         component: NotFound,
         meta: {
             title: '404 页'
+        }
+    },
+    {
+        path: '/wiki/list', // 知识库
+        component: WikiList,
+        meta: {
+            title: '知识库'
+        }
+    },
+    {
+        path: '/wiki/:wikiId', // 知识库详情页
+        component: WikiDetail,
+        meta: {
+            title: '知识库详情'
         }
     },
     {

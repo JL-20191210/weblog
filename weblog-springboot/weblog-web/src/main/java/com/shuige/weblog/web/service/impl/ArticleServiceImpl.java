@@ -58,7 +58,7 @@ public class ArticleServiceImpl implements ArticleService {
         Long size = findIndexArticlePageListReqVO.getSize();
 
         // 第一步：分页查询文章主体记录
-        Page<ArticleDO> articleDOPage = articleMapper.selectPageList(current, size, null, null, null);
+        Page<ArticleDO> articleDOPage = articleMapper.selectPageList(current, size, null, null, null,null);
 
         List<ArticleDO> articleDOS = articleDOPage.getRecords();
 
@@ -165,6 +165,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .categoryName(categoryDO.getName())
                 .totalWords(totalWords)
                 .readTime(MarkdownStatsUtil.calculateReadingTime(totalWords))
+                .updateTime(articleDO.getUpdateTime())
                 .build();
 
         List<ArticleTagRelDO> articleTagRelDOS = articleTagRelMapper.selectByArticleId(articleId);

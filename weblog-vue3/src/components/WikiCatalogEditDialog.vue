@@ -100,7 +100,7 @@
 
                 <!-- 二级目录 -->
                 <ul v-if="catalog.children && catalog.children.length > 0">
-                    <VueDraggable ref="el" v-model="catalog.children">
+                    <VueDraggable ref="el" v-model="catalog.children" @end="onDragEnd">
                         <li v-for="(childCatalog, index2) in catalog.children" :key="index2"
                             class="flex items-center ps-10 py-2 pe-3 rounded-lg hover:bg-gray-100">
                             <!-- 二级标题 -->
@@ -224,7 +224,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 import FormDialog from '@/components/FormDialog.vue'
 import { getArticlePageList } from '@/api/admin/article'
 import { Search, RefreshRight, Check, Close } from '@element-plus/icons-vue'
-import { getWikiCatalogs } from '@/api/admin/wiki'
+import { getWikiCatalogs,updateWikiCatalogs  } from '@/api/admin/wiki'
 
 // 对话框是否显示
 const dialogVisible = ref(false)
@@ -315,6 +315,7 @@ function catalogMove(catalogId, sort, action) {
     // 重新排序
     sortCatalogs()
     console.log(catalogs.value)
+    updateWikiCatalogsData()
 }
 
 // 根据排序规则，得到其需要互换位置的目录
@@ -359,6 +360,7 @@ const removeCatalog = (catalogId) => {
     showModel('确认删除目录？').then(() => {
         deleteCatalog(catalogs.value, catalogId)
         console.log(catalogs.value);
+        updateWikiCatalogsData()
     }).catch((e) => {
         console.log('取消删除');
     })
@@ -369,6 +371,7 @@ const removeArticleFromCatalog = (catalogId) => {
     showModel('是否移除该篇文章').then(() => {
         deleteCatalog(catalogs.value, catalogId)
         console.log(catalogs.value);
+        updateWikiCatalogsData()
     }).catch((e) => {
         console.log('取消移除');
     })
@@ -397,6 +400,7 @@ const onEditTitleInputBlur = (catalogId) => {
     targetCatalog.editing = false
     //若标题被设置为空字符串则设置为默认标题提示用户
     targetCatalog.title = targetCatalog.title !== '' ? targetCatalog.title : '请输入标题'
+    updateWikiCatalogsData()
 }
 
 function findCatalogById(catalogs, targetId) {
@@ -415,14 +419,6 @@ function findCatalogById(catalogs, targetId) {
     }
     return null//没有找到目录信息
 }
-
-// 对外暴露方法
-defineExpose({
-    open,
-    close,
-    showBtnLoading,
-    closeBtnLoading
-})
 
 // 临时 ID
 const tmpId = ref(-1)
@@ -456,10 +452,9 @@ const onAddCatalogSubmit = () => {
         // 将表单中的 title 置空
         addCatalogForm.title = ''
         console.log(catalogs.value)
+        updateWikiCatalogsData()
     })
 }
-
-
 
 // 模糊搜索的文章标题
 const searchArticleTitle = ref('')
@@ -592,6 +587,7 @@ const onAddArticle2CatalogSubmit = () => {
     addArticle2CatalogDialogRef.value.close()
     // 置空被选择的文章
     selectionArticles.value = []
+    updateWikiCatalogsData()
 }
 
 // 目录数据
@@ -615,4 +611,32 @@ const open = (wikiId) => {
     currWikiId.value = wikiId
     getCatalogs()
 }
+
+// 更新知识库目录数据
+function updateWikiCatalogsData() {
+    updateWikiCatalogs({id: currWikiId.value, catalogs: catalogs.value}).then(res => {
+        // 响参失败，提示错误消息
+        if (res.success == false) {
+            let message = res.message
+            showMessage(message, 'error')
+        }
+
+        // 重新渲染目录数据
+        getCatalogs(currWikiId.value)
+    })
+}
+
+// 拖拽结束事件
+const onDragEnd = (event) => {
+    console.log('拖拽结束')
+    updateWikiCatalogsData()
+}
+
+// 对外暴露方法
+defineExpose({
+    open,
+    close,
+    showBtnLoading,
+    closeBtnLoading
+})
 </script>
