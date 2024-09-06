@@ -1,6 +1,6 @@
 <template>
     <div class="main min-h-screen flex flex-col">
-        <WikiHeader></WikiHeader>
+        <WikiHeader :catalogs="catalogs"></WikiHeader>
         <main class="grow container max-w-screen-3xl mx-auto px-4 sm:px-6 md:px-8 py-4">
             <!-- 左边栏 -->
             <div class="hidden lg:block fixed z-20 inset-0 top-[5.5rem] 
@@ -21,11 +21,11 @@
                                         <!-- 一级目录标题 -->
                                         <span class="flex items-center" v-html="catalog.title"></span>
                                         <!-- 箭头 -->
-                                        <svg data-accordion-icon class="inline justify-self-end w-2.5 h-2.5 rotate-90 transition-all shrink-0"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        <svg data-accordion-icon class="inline justify-self-end w-2.5 h-2.5 rotate-0 transition-all shrink-0"
+                                            aria-hidden="false" xmlns="http://www.w3.org/2000/svg" fill="none"
                                             viewBox="0 0 10 6">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="M9 5 5 1 1 5" />
+                                                stroke-width="2" d="M1 1l4 4 4-4"  />
                                         </svg>
                                     </button>
                                 </h2>
@@ -38,7 +38,6 @@
                                         :class="[childCatalog.articleId == route.query.articleId ? 'bg-sky-50 text-sky-600 dark:bg-sky-950 dark:text-sky-500' : 'hover:bg-gray-100 dark:hover:bg-gray-800']"
                                         @click="goWikiArticleDetailPage(childCatalog.articleId)"
                                         v-html="childCatalog.title"></li>
-
                                 </ul>
                             </div>
                         </div>
@@ -401,8 +400,8 @@ watch(route, (newRoute, oldRoute) => {
     background-color: #0d1117;
 }
 
-.rotate-180{
-    --tw-rotate: 180deg;
+.rotate-180 {
+    --tw-rotate: -90deg;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -781,9 +780,6 @@ watch(route, (newRoute, oldRoute) => {
     -webkit-mask-image: var(--copied-icon);
     mask-image: var(--copied-icon);
 }
-
-
-
 
 /* 收缩、展开相关样式 */
 .left-toc-sidebar {
