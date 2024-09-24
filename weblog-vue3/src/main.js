@@ -14,6 +14,7 @@ import pinia from '@/stores'
 // 图片点击放大
 import 'viewerjs/dist/viewer.css'
 import VueViewer from 'v-viewer'
+
 const app = createApp(App)
 // 应用Pinia
 app.use(router)
