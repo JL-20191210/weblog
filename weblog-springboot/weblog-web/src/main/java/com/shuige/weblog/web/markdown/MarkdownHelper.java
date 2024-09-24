@@ -2,6 +2,7 @@ package com.shuige.weblog.web.markdown;
 
 import com.shuige.weblog.web.markdown.renderer.ImageNodeRenderer;
 import com.shuige.weblog.web.markdown.renderer.LinkNodeRenderer;
+import com.shuige.weblog.web.markdown.renderer.MermaidNodeRenderer;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.ext.heading.anchor.HeadingAnchorExtension;
@@ -43,6 +44,7 @@ public class MarkdownHelper {
                 .extensions(extensions)
                 .nodeRendererFactory(context -> new ImageNodeRenderer(context))
                 .nodeRendererFactory(context -> new LinkNodeRenderer(context))
+                .nodeRendererFactory(context -> new MermaidNodeRenderer(context))
                 .build();
     }
 

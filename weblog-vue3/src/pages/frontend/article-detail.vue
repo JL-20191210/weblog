@@ -227,10 +227,7 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/tokyo-night-dark.css'
 import { initTooltips } from 'flowbite'
 import { useDark } from '@vueuse/core'
-
 const isDark = useDark()
-
-
 const route = useRoute()
 
 // 监听路由
