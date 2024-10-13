@@ -13,7 +13,7 @@
                     <el-upload class="avatar-uploader"
                         action="#" :show-file-list="false"
                         :on-change="handleLogoChange" :auto-upload="false">
-                        <img v-if="form.logo" :src="form.logo" class="avatar" />
+                        <img v-if="form.logo" :src="form.logo" class="avatar w-10 h-10" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
                         </el-icon>
@@ -23,7 +23,7 @@
                     <el-upload class="avatar-uploader"
                         action="#" :show-file-list="false"
                         :on-change="handleAvatarChange" :auto-upload="false">
-                        <img v-if="form.avatar" :src="form.avatar" class="avatar" />
+                        <img v-if="form.avatar" :src="form.avatar" class="avatar w-10 h-10" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
                         </el-icon>
