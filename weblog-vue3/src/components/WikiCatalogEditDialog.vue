@@ -445,6 +445,7 @@ const onAddCatalogSubmit = () => {
         }
         // 添加新目录
         catalogs.value.push(newCatalog)
+        
         // 减一
         tmpId.value -= 1
         // 关闭表单对话框
